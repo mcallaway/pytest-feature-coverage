@@ -112,7 +112,7 @@ ______________________________________________________________________
 
 ### Functional Requirements
 
-- **FR-001**: System MUST load and validate `*.feature.yaml` files from configured directories at pytest collection time
+- **FR-001**: System MUST load and validate `*.feature.yaml` files from explicitly configured directories at pytest collection time; if no paths are configured, emit a clear error
 - **FR-002**: System MUST fail pytest collection with clear error messages when YAML files do not match the expected schema
 - **FR-003**: System MUST provide a `req()` pytest marker for annotating tests with one or more requirement IDs
 - **FR-004**: System MUST support many-to-many relationships between tests and requirements
@@ -121,16 +121,16 @@ ______________________________________________________________________
 - **FR-007**: System MUST exit non-zero when coverage percentage falls below the configured `--feature-coverage-min` threshold
 - **FR-008**: System MUST support JSON output format via `--feature-coverage-format=json`
 - **FR-009**: System MUST support Markdown output format via `--feature-coverage-format=markdown`
-- **FR-010**: System MUST emit a warning when a `req()` marker references an ID not present in any loaded YAML (configurable to error)
+- **FR-010**: System MUST emit a warning when a `req()` marker references an ID not present in any loaded YAML; when `feature_coverage_strict = true`, emit an error instead and fail collection
 - **FR-011**: System MUST fail collection when duplicate requirement IDs exist across feature YAML files
-- **FR-012**: System MUST be configurable via `pyproject.toml` under `[tool.pytest.ini_options]`
+- **FR-012**: System MUST be configurable via `pyproject.toml` under `[tool.pytest.ini_options]`; `feature_yaml_paths` is required (no default)
 - **FR-013**: System MUST produce identical output for identical inputs (determinism)
 
 ### Key Entities
 
 - **Feature**: A top-level grouping with an ID and name, defined in YAML. Contains components.
 - **Component**: A named grouping within a feature. Contains requirements.
-- **Requirement**: A numbered statement within a component. Has a composite ID (`feature.COMPONENT.number`) and description text.
+- **Requirement**: A numbered statement within a component. Has a composite ID (`feature-name.COMPONENT.number`) and description text. Matching between `req()` markers and YAML is case-sensitive.
 - **Coverage Matrix**: The cross-reference mapping requirements to their covering tests (or lack thereof).
 
 ## Success Criteria *(mandatory)*
@@ -143,6 +143,16 @@ ______________________________________________________________________
 - **SC-004**: Coverage threshold enforcement exits non-zero with a message stating actual vs. required coverage
 - **SC-005**: The plugin adds zero runtime overhead to test execution itself (overhead only at collection and reporting phases)
 - **SC-006**: The plugin has no runtime dependencies beyond pytest, pydantic, and PyYAML
+
+## Clarifications
+
+### Session 2025-05-19
+
+- Q: Default YAML discovery behavior when no paths configured? → A: Require explicit configuration; emit error if no paths set
+- Q: Does `--feature-coverage-min` alone activate the plugin? → A: No; `--feature-coverage` is always required to activate
+- Q: Default severity for orphan `req()` markers? → A: Warning by default; configurable to error via `feature_coverage_strict`
+- Q: How to handle a component with zero requirements? → A: Valid; shows 0/0 in report, excluded from overall percentage
+- Q: Case sensitivity for component names in `req()` matching? → A: Case-sensitive; must match YAML exactly
 
 ## Assumptions
 
