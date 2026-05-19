@@ -23,10 +23,10 @@
 
 **Purpose**: Project initialization, dependencies, and plugin entry point
 
-- [ ] T001 Add runtime dependencies (pydantic, pyyaml) and pytest entry point to pyproject.toml
-- [ ] T002 [P] Create reference feature YAML fixture in tests/data/reference.feature.yaml (FR-014)
-- [ ] T003 [P] Create tests/conftest.py with pytester plugin registration
-- [ ] T004 [P] Create src/pytest_feature_coverage/reporters/\_\_init\_\_.py (empty package init)
+- [x] T001 Add runtime dependencies (pydantic, pyyaml) and pytest entry point to pyproject.toml
+- [x] T002 [P] Create reference feature YAML fixture in tests/data/reference.feature.yaml (FR-014)
+- [x] T003 [P] Create tests/conftest.py with pytester plugin registration
+- [x] T004 [P] Create src/pytest_feature_coverage/reporters/\_\_init\_\_.py (empty package init)
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
@@ -34,8 +34,8 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Implement plugin.py with pytest_addoption (register --feature-coverage, --feature-coverage-format, --feature-coverage-min) and pytest_configure (register req marker, register INI options) in src/pytest_feature_coverage/plugin.py
-- [ ] T006 Implement early-return guard in all hooks when --feature-coverage is not active in src/pytest_feature_coverage/plugin.py
+- [x] T005 Implement plugin.py with pytest_addoption (register --feature-coverage, --feature-coverage-format, --feature-coverage-min) and pytest_configure (register req marker, register INI options) in src/pytest_feature_coverage/plugin.py
+- [x] T006 Implement early-return guard in all hooks when --feature-coverage is not active in src/pytest_feature_coverage/plugin.py
 
 **Checkpoint**: Plugin installs, registers CLI options, and is inert when flag not passed
 
