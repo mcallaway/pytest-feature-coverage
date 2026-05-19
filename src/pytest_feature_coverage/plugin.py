@@ -67,6 +67,39 @@ def pytest_configure(config: pytest.Config) -> None:
     active = config.getoption('--feature-coverage', default=False)
     setattr(config, _PLUGIN_ACTIVE_ATTR, active)
 
+    if not active:
+        return
+
+    # Load feature YAML files
+    from pathlib import Path
+
+    from .schema import (
+        DuplicateFeatureError,
+        FeatureFileLoadError,
+        load_all_features,
+    )
+
+    yaml_paths = config.getini('feature_yaml_paths')
+    if not yaml_paths:
+        import _pytest.config
+
+        msg = (
+            "feature-coverage: 'feature_yaml_paths' INI option is required "
+            'when --feature-coverage is active'
+        )
+        raise _pytest.config.UsageError(msg)
+
+    directories = [Path(p) for p in yaml_paths]
+
+    try:
+        features = load_all_features(directories)
+    except (FeatureFileLoadError, DuplicateFeatureError) as e:
+        import _pytest.config
+
+        raise _pytest.config.UsageError(str(e)) from e
+
+    setattr(config, _PLUGIN_STATE_ATTR, {'features': features})
+
 
 def _is_active(config: pytest.Config) -> bool:
     """Check if the plugin is activated for this session."""

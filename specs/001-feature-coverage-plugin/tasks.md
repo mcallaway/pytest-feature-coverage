@@ -47,18 +47,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T007 [P] [US1] Write unit tests for schema validation (valid YAML, missing fields, invalid types) in tests/unit/test_schema.py
-- [ ] T008 [P] [US1] Write unit tests for YAML loading from directory (file discovery, path resolution) in tests/unit/test_schema.py
+- [x] T007 [P] [US1] Write unit tests for schema validation (valid YAML, missing fields, invalid types) in tests/unit/test_schema.py
+- [x] T008 [P] [US1] Write unit tests for YAML loading from directory (file discovery, path resolution) in tests/unit/test_schema.py
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement Pydantic models (FeatureModel, ComponentModel, FeatureFileModel) in src/pytest_feature_coverage/schema.py
-- [ ] T010 [US1] Implement load_feature_file() and load_all_features() functions in src/pytest_feature_coverage/schema.py
-- [ ] T011 [US1] Wire schema loading into pytest_configure hook: discover YAML paths from config, load and validate, store on config object in src/pytest_feature_coverage/plugin.py
-- [ ] T012 [US1] Implement duplicate feature name detection across loaded files in src/pytest_feature_coverage/schema.py
-- [ ] T013 [US1] Write acceptance test: valid YAML loads without error in tests/acceptance/test_plugin_integration.py
-- [ ] T014 [US1] Write acceptance test: invalid YAML fails collection with clear error in tests/acceptance/test_plugin_integration.py
-- [ ] T015 [US1] Write acceptance test: missing feature_yaml_paths config emits error in tests/acceptance/test_plugin_integration.py
+- [x] T009 [US1] Implement Pydantic models (FeatureModel, ComponentModel, FeatureFileModel) in src/pytest_feature_coverage/schema.py
+- [x] T010 [US1] Implement load_feature_file() and load_all_features() functions in src/pytest_feature_coverage/schema.py
+- [x] T011 [US1] Wire schema loading into pytest_configure hook: discover YAML paths from config, load and validate, store on config object in src/pytest_feature_coverage/plugin.py
+- [x] T012 [US1] Implement duplicate feature name detection across loaded files in src/pytest_feature_coverage/schema.py
+- [x] T013 [US1] Write acceptance test: valid YAML loads without error in tests/acceptance/test_plugin_integration.py
+- [x] T014 [US1] Write acceptance test: invalid YAML fails collection with clear error in tests/acceptance/test_plugin_integration.py
+- [x] T015 [US1] Write acceptance test: missing feature_yaml_paths config emits error in tests/acceptance/test_plugin_integration.py
 
 **Checkpoint**: YAML files load and validate; errors are clear and name the file
 

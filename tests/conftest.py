@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+import yaml
 
 # Enable pytester for acceptance tests that invoke pytest in a subprocess
 pytest_plugins = ['pytester']
@@ -17,6 +18,6 @@ def reference_yaml_path() -> Path:
 
 
 @pytest.fixture
-def reference_yaml_content(reference_yaml_path: Path) -> str:
-    """Raw content of the reference feature YAML fixture."""
-    return reference_yaml_path.read_text()
+def reference_yaml_content(reference_yaml_path: Path) -> dict:
+    """Parsed content of the reference feature YAML fixture."""
+    return yaml.safe_load(reference_yaml_path.read_text())
