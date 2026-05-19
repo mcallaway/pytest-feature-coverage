@@ -83,8 +83,6 @@ tests/
 
 No violations to justify — architecture is straightforward.
 
-______________________________________________________________________
-
 ## Agentic Workflow: Project Memory
 
 > This section is added by the agentic-workflow preset. It connects plans to the project-level knowledge in `docs/`.

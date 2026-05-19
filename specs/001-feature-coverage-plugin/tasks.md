@@ -19,8 +19,6 @@
 - **Tests**: `tests/unit/`, `tests/acceptance/`
 - **Fixtures**: `tests/data/`
 
-______________________________________________________________________
-
 ## Phase 1: Setup (Shared Infrastructure)
 
 **Purpose**: Project initialization, dependencies, and plugin entry point
@@ -29,8 +27,6 @@ ______________________________________________________________________
 - [ ] T002 [P] Create reference feature YAML fixture in tests/data/reference.feature.yaml (FR-014)
 - [ ] T003 [P] Create tests/conftest.py with pytester plugin registration
 - [ ] T004 [P] Create src/pytest_feature_coverage/reporters/\_\_init\_\_.py (empty package init)
-
-______________________________________________________________________
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
@@ -42,8 +38,6 @@ ______________________________________________________________________
 - [ ] T006 Implement early-return guard in all hooks when --feature-coverage is not active in src/pytest_feature_coverage/plugin.py
 
 **Checkpoint**: Plugin installs, registers CLI options, and is inert when flag not passed
-
-______________________________________________________________________
 
 ## Phase 3: User Story 1 - Define Requirements in YAML (Priority: P1) MVP
 
@@ -68,8 +62,6 @@ ______________________________________________________________________
 
 **Checkpoint**: YAML files load and validate; errors are clear and name the file
 
-______________________________________________________________________
-
 ## Phase 4: User Story 2 - Annotate Tests with Requirement Markers (Priority: P1)
 
 **Goal**: Collect `req()` markers from test items and map them to requirement IDs
@@ -89,8 +81,6 @@ ______________________________________________________________________
 - [ ] T021 [US2] Write acceptance test: orphan marker emits warning in tests/acceptance/test_plugin_integration.py
 
 **Checkpoint**: Markers are scanned; orphan detection works; warning/error behavior correct
-
-______________________________________________________________________
 
 ## Phase 5: User Story 3 - Generate Coverage Report (Priority: P1)
 
@@ -114,8 +104,6 @@ ______________________________________________________________________
 
 **Checkpoint**: MVP complete — `pytest --feature-coverage` shows a correct text coverage report
 
-______________________________________________________________________
-
 ## Phase 6: User Story 4 - CI Coverage Threshold (Priority: P2)
 
 **Goal**: Exit non-zero when coverage falls below `--feature-coverage-min`
@@ -132,8 +120,6 @@ ______________________________________________________________________
 - [ ] T032 [US4] Add "FAILED: Feature coverage X% is below minimum Y%" message to text reporter in src/pytest_feature_coverage/reporters/text.py
 
 **Checkpoint**: CI gating works; exit code reflects coverage vs threshold
-
-______________________________________________________________________
 
 ## Phase 7: User Story 5 - Machine-Readable Output Formats (Priority: P2)
 
@@ -156,8 +142,6 @@ ______________________________________________________________________
 
 **Checkpoint**: All three output formats work correctly
 
-______________________________________________________________________
-
 ## Phase 8: User Story 6 - Configuration via pyproject.toml (Priority: P3)
 
 **Goal**: INI options provide defaults; CLI flags override them
@@ -175,8 +159,6 @@ ______________________________________________________________________
 
 **Checkpoint**: Configuration works from pyproject.toml with CLI override
 
-______________________________________________________________________
-
 ## Phase 9: Polish & Cross-Cutting Concerns
 
 **Purpose**: Final cleanup, documentation, and quality verification
@@ -184,8 +166,6 @@ ______________________________________________________________________
 - [ ] T043 Verify all ruff lint and ty type-check passes across src/ and tests/
 - [ ] T044 Verify determinism: run acceptance test suite twice, confirm identical output
 - [ ] T045 Update README.md with usage documentation and installation instructions
-
-______________________________________________________________________
 
 ## Dependencies
 
@@ -223,8 +203,6 @@ Within each phase, tasks marked [P] can run in parallel:
 - **MVP**: Phases 1-5 (Setup + US1 + US2 + US3 = working text coverage report)
 - **Full feature**: Phases 6-8 (threshold, formats, config)
 - **Ship**: Phase 9 (polish)
-
-______________________________________________________________________
 
 ## Agentic Workflow: Post-Implementation Checklist
 

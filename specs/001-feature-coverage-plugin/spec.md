@@ -21,8 +21,6 @@ A developer creates a `*.feature.yaml` file alongside their feature documentatio
 1. **Given** a YAML file missing required fields, **When** pytest collects tests, **Then** collection fails with a clear error message identifying the invalid file and missing fields
 1. **Given** a YAML file with duplicate requirement IDs across features, **When** pytest collects tests, **Then** collection fails with a clear error identifying the duplicates
 
-______________________________________________________________________
-
 ### User Story 2 - Annotate Tests with Requirement Markers (Priority: P1)
 
 A developer annotates their test functions with `@pytest.mark.req("feature.COMPONENT.N")` to declare which requirements each test covers. A single test may cover multiple requirements and a requirement may be covered by multiple tests.
@@ -36,8 +34,6 @@ A developer annotates their test functions with `@pytest.mark.req("feature.COMPO
 1. **Given** a test annotated with `@pytest.mark.req("feature.COMPONENT.1")`, **When** pytest collects tests, **Then** the test is associated with that requirement
 1. **Given** a test annotated with multiple requirement IDs, **When** pytest collects tests, **Then** the test is associated with all specified requirements
 1. **Given** a `req()` marker referencing an ID not present in any YAML file, **When** pytest collects tests, **Then** a warning is emitted (configurable to error)
-
-______________________________________________________________________
 
 ### User Story 3 - Generate Coverage Report (Priority: P1)
 
@@ -53,8 +49,6 @@ A developer runs `pytest --feature-coverage` and sees a deterministic text repor
 1. **Given** identical inputs (same YAML, same tests), **When** `pytest --feature-coverage` is run multiple times, **Then** the output is identical each time (deterministic)
 1. **Given** a project with no feature YAML files, **When** `pytest --feature-coverage` is run, **Then** a clear message indicates no features were found
 
-______________________________________________________________________
-
 ### User Story 4 - CI Coverage Threshold (Priority: P2)
 
 A CI pipeline runs `pytest --feature-coverage --feature-coverage-min=80` and the process exits non-zero when coverage falls below the threshold, failing the build.
@@ -69,8 +63,6 @@ A CI pipeline runs `pytest --feature-coverage --feature-coverage-min=80` and the
 1. **Given** feature coverage is 85% and threshold is set to 80, **When** pytest runs, **Then** the process exits with exit code 0
 1. **Given** threshold is set to 0 (default), **When** pytest runs, **Then** the threshold check always passes
 
-______________________________________________________________________
-
 ### User Story 5 - Machine-Readable Output Formats (Priority: P2)
 
 A developer or CI pipeline generates coverage reports in JSON or Markdown format for downstream tooling or repository documentation.
@@ -84,8 +76,6 @@ A developer or CI pipeline generates coverage reports in JSON or Markdown format
 1. **Given** a project with feature YAML and annotated tests, **When** `pytest --feature-coverage --feature-coverage-format=json` is run, **Then** structured JSON is written to stdout
 1. **Given** the same project, **When** `pytest --feature-coverage --feature-coverage-format=markdown` is run, **Then** a deterministic markdown table is written to stdout
 
-______________________________________________________________________
-
 ### User Story 6 - Configuration via pyproject.toml (Priority: P3)
 
 A developer configures the plugin's behavior (YAML search paths, default format, minimum threshold) through standard pytest configuration in `pyproject.toml`.
@@ -98,8 +88,6 @@ A developer configures the plugin's behavior (YAML search paths, default format,
 
 1. **Given** `feature_yaml_paths = ["docs/features"]` in pyproject.toml, **When** pytest runs, **Then** YAML files are searched in `docs/features/`
 1. **Given** `feature_coverage_min = 80` in pyproject.toml, **When** pytest runs without `--feature-coverage-min`, **Then** the 80% threshold is enforced
-
-______________________________________________________________________
 
 ### Edge Cases
 
