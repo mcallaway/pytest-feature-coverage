@@ -88,3 +88,99 @@ class TestMissingConfig:
         # No --feature-coverage flag, no config needed
         result = pytester.runpytest()
         result.assert_outcomes(passed=1)
+
+
+class TestReqMarkersCollected:
+    """T020: req() markers collected and associated correctly."""
+
+    def test_markers_are_collected(self, pytester):
+        """req() markers map tests to requirements."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First requirement\n'
+            '      2: Second requirement\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_first():
+                pass
+
+            @pytest.mark.req("app.CORE.2")
+            def test_second():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage')
+        result.assert_outcomes(passed=2)
+
+
+class TestOrphanMarkerWarning:
+    """T021: Orphan marker emits warning."""
+
+    def test_orphan_marker_warns(self, pytester):
+        """Orphan req() emits warning by default."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First requirement\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.99")
+            def test_orphan():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage', '-W', 'all')
+        result.assert_outcomes(passed=1)
+        result.stdout.fnmatch_lines(['*app.CORE.99*'])
+
+    def test_orphan_marker_strict_errors(self, pytester):
+        """Orphan req() errors in strict mode."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First requirement\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+            feature_coverage_strict = true
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.99")
+            def test_orphan():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage')
+        result.stderr.fnmatch_lines(['*orphan*app.CORE.99*'])

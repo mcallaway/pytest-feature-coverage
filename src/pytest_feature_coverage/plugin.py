@@ -104,3 +104,52 @@ def pytest_configure(config: pytest.Config) -> None:
 def _is_active(config: pytest.Config) -> bool:
     """Check if the plugin is activated for this session."""
     return getattr(config, _PLUGIN_ACTIVE_ATTR, False)
+
+
+def _get_known_requirement_ids(config: pytest.Config) -> set[str]:
+    """Build set of all composite requirement IDs from loaded features."""
+    state = getattr(config, _PLUGIN_STATE_ATTR, {})
+    features = state.get('features', [])
+    ids: set[str] = set()
+    for feature_file in features:
+        name = feature_file.feature.name
+        for comp_key, comp in feature_file.components.items():
+            for num in comp.requirements:
+                ids.add(f'{name}.{comp_key}.{num}')
+    return ids
+
+
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:
+    """Scan collected items for req() markers."""
+    if not _is_active(config):
+        return
+
+    import warnings
+
+    from .scanner import find_orphans, scan_requirements
+
+    req_map = scan_requirements(items)
+    known_ids = _get_known_requirement_ids(config)
+    orphans = find_orphans(req_map, known_ids)
+
+    state = getattr(config, _PLUGIN_STATE_ATTR)
+    state['req_map'] = req_map
+    state['orphans'] = orphans
+
+    strict = config.getini('feature_coverage_strict')
+    if orphans and strict:
+        import _pytest.config
+
+        msg = (
+            f'feature-coverage: orphan req() markers found '
+            f'(strict mode): {", ".join(orphans)}'
+        )
+        raise _pytest.config.UsageError(msg)
+    elif orphans:
+        for orphan in orphans:
+            warnings.warn(
+                f"feature-coverage: req('{orphan}') does not match any known requirement",
+                stacklevel=1,
+            )

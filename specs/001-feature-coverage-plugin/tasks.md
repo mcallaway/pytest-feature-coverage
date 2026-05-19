@@ -70,15 +70,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Write unit tests for scanner (single marker, multiple args, multiple markers, no markers) in tests/unit/test_scanner.py
+- [x] T016 [P] [US2] Write unit tests for scanner (single marker, multiple args, multiple markers, no markers) in tests/unit/test_scanner.py
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Implement scan_requirements() function in src/pytest_feature_coverage/scanner.py
-- [ ] T018 [US2] Wire scanner into pytest_collection_modifyitems hook in src/pytest_feature_coverage/plugin.py
-- [ ] T019 [US2] Implement orphan marker detection (warning by default, error if strict) in src/pytest_feature_coverage/scanner.py
-- [ ] T020 [US2] Write acceptance test: req() markers collected and associated correctly in tests/acceptance/test_plugin_integration.py
-- [ ] T021 [US2] Write acceptance test: orphan marker emits warning in tests/acceptance/test_plugin_integration.py
+- [x] T017 [US2] Implement scan_requirements() function in src/pytest_feature_coverage/scanner.py
+- [x] T018 [US2] Wire scanner into pytest_collection_modifyitems hook in src/pytest_feature_coverage/plugin.py
+- [x] T019 [US2] Implement orphan marker detection (warning by default, error if strict) in src/pytest_feature_coverage/scanner.py
+- [x] T020 [US2] Write acceptance test: req() markers collected and associated correctly in tests/acceptance/test_plugin_integration.py
+- [x] T021 [US2] Write acceptance test: orphan marker emits warning in tests/acceptance/test_plugin_integration.py
 
 **Checkpoint**: Markers are scanned; orphan detection works; warning/error behavior correct
 
