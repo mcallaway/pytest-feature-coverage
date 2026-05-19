@@ -1,9 +1,9 @@
 # Feature Specification: Feature Coverage Plugin
 
-**Feature Branch**: `feat/001-feature-coverage-plugin`\
-**Created**: 2025-05-19\
-**Status**: Draft\
-**Input**: User description from `tmp/w21-pytest-feature-coverage.md`
+- **Feature Branch**: `feat/001-feature-coverage-plugin`
+- **Created**: 2025-05-19
+- **Status**: Draft
+- **Input**: User description from `tmp/w21-pytest-feature-coverage.md`
 
 ## User Scenarios & Testing *(mandatory)*
 

@@ -9,9 +9,7 @@ See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `a
 
 ## Current Focus
 
-<!-- Link to the active .specify/specs/NNN/ plan here -->
-
-None yet.
+- **001-feature-coverage-plugin**: pytest plugin for requirement-to-test coverage tracking. [Plan](../../specs/001-feature-coverage-plugin/plan.md) | [Spec](../../specs/001-feature-coverage-plugin/spec.md)
 
 ## Next Steps
 
