@@ -90,17 +90,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Write unit tests for matrix computation (covered, uncovered, many-to-many, zero-req components) in tests/unit/test_matrix.py
-- [ ] T023 [P] [US3] Write unit tests for text reporter output format in tests/unit/test_reporters.py
+- [x] T022 [P] [US3] Write unit tests for matrix computation (covered, uncovered, many-to-many, zero-req components) in tests/unit/test_matrix.py
+- [x] T023 [P] [US3] Write unit tests for text reporter output format in tests/unit/test_reporters.py
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement CoverageMatrix.compute() in src/pytest_feature_coverage/matrix.py
-- [ ] T025 [US3] Implement TextReporter in src/pytest_feature_coverage/reporters/text.py
-- [ ] T026 [US3] Wire matrix computation and text report into pytest_terminal_summary hook in src/pytest_feature_coverage/plugin.py
-- [ ] T027 [US3] Write acceptance test: full text report output matches expected format in tests/acceptance/test_plugin_integration.py
-- [ ] T028 [US3] Write acceptance test: determinism (identical output on repeated runs) in tests/acceptance/test_plugin_integration.py
-- [ ] T029 [US3] Write acceptance test: no YAML files found emits clear message in tests/acceptance/test_plugin_integration.py
+- [x] T024 [US3] Implement CoverageMatrix.compute() in src/pytest_feature_coverage/matrix.py
+- [x] T025 [US3] Implement TextReporter in src/pytest_feature_coverage/reporters/text.py
+- [x] T026 [US3] Wire matrix computation and text report into pytest_terminal_summary hook in src/pytest_feature_coverage/plugin.py
+- [x] T027 [US3] Write acceptance test: full text report output matches expected format in tests/acceptance/test_plugin_integration.py
+- [x] T028 [US3] Write acceptance test: determinism (identical output on repeated runs) in tests/acceptance/test_plugin_integration.py
+- [x] T029 [US3] Write acceptance test: no YAML files found emits clear message in tests/acceptance/test_plugin_integration.py
 
 **Checkpoint**: MVP complete — `pytest --feature-coverage` shows a correct text coverage report
 

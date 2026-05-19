@@ -184,3 +184,110 @@ class TestOrphanMarkerWarning:
         """)
         result = pytester.runpytest('--feature-coverage')
         result.stderr.fnmatch_lines(['*orphan*app.CORE.99*'])
+
+
+class TestTextReport:
+    """T027: Full text report output matches expected format."""
+
+    def test_text_report_output(self, pytester):
+        """Full end-to-end text report with covered and uncovered reqs."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First requirement\n'
+            '      2: Second requirement\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_covers_first():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage', '-v')
+        result.assert_outcomes(passed=1)
+        result.stdout.fnmatch_lines(
+            [
+                '*Feature Coverage*',
+                '*Feature: app (001)*',
+                '*CORE*',
+                '*1: First requirement*',
+                '*2: Second requirement*',
+                '*Coverage: 1/2 (50.0%)*',
+                '*Overall: 1/2 requirements covered (50.0%)*',
+            ]
+        )
+
+
+class TestDeterminism:
+    """T028: Determinism — identical output on repeated runs."""
+
+    def test_deterministic_output(self, pytester):
+        """Two runs produce identical coverage section output."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: A\n'
+            '      2: B\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result1 = pytester.runpytest('--feature-coverage')
+        result2 = pytester.runpytest('--feature-coverage')
+
+        def extract_coverage_section(lines):
+            start = None
+            for i, line in enumerate(lines):
+                if 'Feature Coverage' in line:
+                    start = i
+                    break
+            return lines[start:] if start is not None else []
+
+        section1 = extract_coverage_section(result1.stdout.lines)
+        section2 = extract_coverage_section(result2.stdout.lines)
+        assert section1 == section2
+        assert len(section1) > 0
+
+
+class TestNoYAMLFilesFound:
+    """T029: No YAML files found emits clear message."""
+
+    def test_empty_directory_no_error(self, pytester):
+        """Empty features directory produces report with 0/0."""
+        pytester.mkdir('features')
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            def test_placeholder():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage')
+        result.assert_outcomes(passed=1)
+        result.stdout.fnmatch_lines(['*Overall: 0/0*'])

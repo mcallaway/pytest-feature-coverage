@@ -153,3 +153,38 @@ def pytest_collection_modifyitems(
                 f"feature-coverage: req('{orphan}') does not match any known requirement",
                 stacklevel=1,
             )
+
+
+def pytest_terminal_summary(
+    terminalreporter: pytest.TerminalReporter, config: pytest.Config
+) -> None:
+    """Print the feature coverage report."""
+    if not _is_active(config):
+        return
+
+    from .matrix import compute_coverage
+    from .reporters.text import render_text
+
+    state = getattr(config, _PLUGIN_STATE_ATTR)
+    features = state['features']
+    req_map = state.get('req_map', {})
+    orphans = state.get('orphans', [])
+
+    report = compute_coverage(features, req_map)
+    report.orphan_markers = orphans
+    state['report'] = report
+
+    # Determine format
+    fmt = config.getoption('--feature-coverage-format') or config.getini(
+        'feature_coverage_format'
+    )
+
+    if fmt == 'text':
+        lines = render_text(report)
+    else:
+        # JSON and markdown handled in later phases
+        lines = render_text(report)
+
+    terminalreporter.section('Feature Coverage')
+    for line in lines:
+        terminalreporter.write_line(line)
