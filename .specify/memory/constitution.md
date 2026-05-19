@@ -1,73 +1,73 @@
-# [PROJECT_NAME] Constitution
+<!--
+Sync Impact Report:
+- Version change: 0.0.0 → 1.0.0
+- Added principles: Honest Technical Judgment, Investigate Before Acting,
+  Durable Shared Understanding
+- Added sections: Development Standards, Quality Gates
+- Templates requiring updates: ✅ plan-template.md (no changes needed),
+  ✅ spec-template.md (no changes needed), ✅ tasks-template.md (no changes needed)
+- Follow-up TODOs: none
+-->
 
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# pytest-feature-coverage Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
+### I. Honest Technical Judgment Over Politeness
 
-<!-- Example: I. Library-First -->
+- Say "I don't know" when you don't know
+- Push back when you disagree, providing your reasoning
+- Never be agreeable just to be nice
+- Complexity MUST be justified; default to the simplest approach
 
-[PRINCIPLE_1_DESCRIPTION]
+### II. Investigate Before Acting
 
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+- Stop and ask when multiple valid approaches exist
+- Read error messages completely -- they often contain the solution
+- Find and understand working examples before implementing patterns
+- Test one hypothesis at a time
+- Check `docs/decisions/` when making architectural choices
 
-### [PRINCIPLE_2_NAME]
+### III. Strive For Durable Shared Understanding
 
-<!-- Example: II. CLI Interface -->
+- Consider whether what is being asked is well formulated and clear
+- Ask clarifying questions if needed
+- Once you believe you understand, restate what you think the shared intent is
+- Read `./docs` and consider if what is being asked is additive or a change
+- Update plans and create ADRs before committing significant changes
 
-[PRINCIPLE_2_DESCRIPTION]
+## Development Standards
 
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+- Simple, clean, and maintainable beats clever or complex (YAGNI)
+- Reduce duplication even if refactoring takes effort
+- Names describe what things ARE, not implementation or history
+- Python source lives in `./src/`; use `ruff` for linting/formatting; use `ty` for type checking
+- No runtime dependencies beyond pytest, pydantic, and PyYAML
+- Use Conventional Commits for PR titles (release-please manages releases)
+- Never skip pre-commit hooks
 
-### [PRINCIPLE_3_NAME]
+## Quality Gates
 
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-
-[PRINCIPLE_3_DESCRIPTION]
-
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
-
-### [PRINCIPLE_4_NAME]
-
-<!-- Example: IV. Integration Testing -->
-
-[PRINCIPLE_4_DESCRIPTION]
-
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
-
-### [PRINCIPLE_5_NAME]
-
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-
-[PRINCIPLE_5_DESCRIPTION]
-
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
-
-## [SECTION_2_NAME]
-
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- TDD mandatory: write failing test, confirm failure, implement, verify pass
+- Separate unit tests (`tests/unit/`) from acceptance tests (`tests/acceptance/`)
+- All test failures are your responsibility (Broken Windows theory)
+- Never hide failing features with trivial tests
+- Never delete a failing test -- raise the issue instead
+- Test output MUST be pristine; capture and validate expected errors
+- No mocks in acceptance tests; use real data
+- Strive for >75% coverage without building unwieldy tests for 100%
 
 ## Governance
 
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes conflicting guidance. Amendments require:
 
-[GOVERNANCE_RULES]
+1. A documented rationale (ADR in `docs/decisions/`)
+2. Version bump following semver (MAJOR: principle removal/redefinition,
+   MINOR: new principle/section, PATCH: wording/clarification)
+3. Propagation check across templates and AGENTS.md files
 
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+All PRs MUST verify compliance with these principles. The layered AGENTS.md
+files (`AGENTS.md`, `src/AGENTS.md`, `tests/AGENTS.md`) provide operational
+detail but do not override this constitution.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-05-19 | **Last Amended**: 2025-05-19
