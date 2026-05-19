@@ -2,9 +2,10 @@
 description: Comprehensive pre-merge PR review — CI status, code, docs, staleness
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Review Pull Request
 
 Comprehensive pre-merge review covering CI status, code quality, documentation completeness, and merge readiness.

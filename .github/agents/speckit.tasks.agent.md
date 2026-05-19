@@ -1,6 +1,6 @@
 ---
 description: Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
-handoffs: 
+handoffs:
   - label: Analyze For Consistency
     agent: speckit.analyze
     prompt: Run a project analysis for consistency
@@ -22,6 +22,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 ## Pre-Execution Checks
 
 **Check for extension hooks (before tasks generation)**:
+
 - Check if `.specify/extensions.yml` exists in the project root.
 - If it exists, read it and look for entries under the `hooks.before_tasks` key
 - If the YAML cannot be parsed or is invalid, skip hook checking silently and continue normally
@@ -48,21 +49,23 @@ You **MUST** consider the user input before proceeding (if not empty).
     **Automatic Pre-Hook**: {extension}
     Executing: `/{command}`
     EXECUTE_COMMAND: {command}
-    
+
     Wait for the result of the hook command before proceeding to the Outline.
     ```
 - If no hooks are registered or `.specify/extensions.yml` does not exist, skip silently
 
 ## Outline
 
-1. **Setup**: Run `.specify/scripts/bash/setup-tasks.sh --json` from repo root and parse FEATURE_DIR, TASKS_TEMPLATE, and AVAILABLE_DOCS list. `FEATURE_DIR` and `TASKS_TEMPLATE` must be absolute paths when provided. `AVAILABLE_DOCS` is a list of document names/relative paths available under `FEATURE_DIR` (for example `research.md` or `contracts/`). For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+1. **Setup**: Run `.specify/scripts/bash/setup-tasks.sh --json` from repo root and parse FEATURE_DIR, TASKS_TEMPLATE, and AVAILABLE_DOCS list. `FEATURE_DIR` and `TASKS_TEMPLATE` must be absolute paths when provided. `AVAILABLE_DOCS` is a list of document names/relative paths available under `FEATURE_DIR` (for example `research.md` or `contracts/`). For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'''m Groot' (or double-quote if possible: "I'm Groot").
 
-2. **Load design documents**: Read from FEATURE_DIR:
+1. **Load design documents**: Read from FEATURE_DIR:
+
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
    - **Optional**: data-model.md (entities), contracts/ (interface contracts), research.md (decisions), quickstart.md (test scenarios)
    - Note: Not all projects have all documents. Generate tasks based on what's available.
 
-3. **Execute task generation workflow**:
+1. **Execute task generation workflow**:
+
    - Load plan.md and extract tech stack, libraries, project structure
    - Load spec.md and extract user stories with their priorities (P1, P2, P3, etc.)
    - If data-model.md exists: Extract entities and map to user stories
@@ -73,7 +76,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Create parallel execution examples per user story
    - Validate task completeness (each user story has all needed tasks, independently testable)
 
-4. **Generate tasks.md**: Read the tasks template from TASKS_TEMPLATE (from the JSON output above) and use it as structure. If TASKS_TEMPLATE is empty, fall back to `.specify/templates/tasks-template.md`. Fill with:
+1. **Generate tasks.md**: Read the tasks template from TASKS_TEMPLATE (from the JSON output above) and use it as structure. If TASKS_TEMPLATE is empty, fall back to `.specify/templates/tasks-template.md`. Fill with:
+
    - Correct feature name from plan.md
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
@@ -86,7 +90,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Parallel execution examples per story
    - Implementation strategy section (MVP first, incremental delivery)
 
-5. **Report**: Output path to generated tasks.md and summary:
+1. **Report**: Output path to generated tasks.md and summary:
+
    - Total task count
    - Task count per user story
    - Parallel opportunities identified
@@ -94,7 +99,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Suggested MVP scope (typically just User Story 1)
    - Format validation: Confirm ALL tasks follow the checklist format (checkbox, ID, labels, file paths)
 
-6. **Check for extension hooks**: After tasks.md is generated, check if `.specify/extensions.yml` exists in the project root.
+1. **Check for extension hooks**: After tasks.md is generated, check if `.specify/extensions.yml` exists in the project root.
+
    - If it exists, read it and look for entries under the `hooks.after_tasks` key
    - If the YAML cannot be parsed or is invalid, skip hook checking silently and continue normally
    - Filter out hooks where `enabled` is explicitly `false`. Treat hooks without an `enabled` field as enabled by default.
@@ -144,15 +150,15 @@ Every task MUST strictly follow this format:
 **Format Components**:
 
 1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox)
-2. **Task ID**: Sequential number (T001, T002, T003...) in execution order
-3. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
-4. **[Story] label**: REQUIRED for user story phase tasks only
+1. **Task ID**: Sequential number (T001, T002, T003...) in execution order
+1. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
+1. **[Story] label**: REQUIRED for user story phase tasks only
    - Format: [US1], [US2], [US3], etc. (maps to user stories from spec.md)
    - Setup phase: NO story label
-   - Foundational phase: NO story label  
+   - Foundational phase: NO story label
    - User Story phases: MUST have story label
    - Polish phase: NO story label
-5. **Description**: Clear action with exact file path
+1. **Description**: Clear action with exact file path
 
 **Examples**:
 
@@ -168,6 +174,7 @@ Every task MUST strictly follow this format:
 ### Task Organization
 
 1. **From User Stories (spec.md)** - PRIMARY ORGANIZATION:
+
    - Each user story (P1, P2, P3...) gets its own phase
    - Map all related components to their story:
      - Models needed for that story
@@ -176,16 +183,19 @@ Every task MUST strictly follow this format:
      - If tests requested: Tests specific to that story
    - Mark story dependencies (most stories should be independent)
 
-2. **From Contracts**:
+1. **From Contracts**:
+
    - Map each interface contract → to the user story it serves
    - If tests requested: Each interface contract → contract test task [P] before implementation in that story's phase
 
-3. **From Data Model**:
+1. **From Data Model**:
+
    - Map each entity to the user story(ies) that need it
    - If entity serves multiple stories: Put in earliest story or Setup phase
    - Relationships → service layer tasks in appropriate story phase
 
-4. **From Setup/Infrastructure**:
+1. **From Setup/Infrastructure**:
+
    - Shared infrastructure → Setup phase (Phase 1)
    - Foundational/blocking tasks → Foundational phase (Phase 2)
    - Story-specific setup → within that story's phase

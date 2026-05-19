@@ -2,9 +2,10 @@
 description: Detect drift between code and documented design — two-way staleness check
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Review Alignment
 
 Check whether the code matches the documented design and whether the documented design matches the code. This is a two-way check.

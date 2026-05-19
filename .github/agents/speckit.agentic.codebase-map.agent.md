@@ -2,9 +2,10 @@
 description: Create or refresh a feature-to-code mapping in docs/design/codebase-map.md
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Codebase Map
 
 Create or refresh `docs/design/codebase-map.md` — a feature-to-code mapping that helps both humans and agents navigate the project.

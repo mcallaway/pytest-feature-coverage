@@ -2,9 +2,10 @@
 description: Post-implementation code review — correctness, clarity, testing, conventions
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Code Review
 
 Review changed files for correctness, clarity, testing coverage, and adherence to project conventions.

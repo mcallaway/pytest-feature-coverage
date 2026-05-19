@@ -53,10 +53,7 @@ mise run test:typecheck     # ty type checker
 
 ### Creating Releases
 
-Releases are managed by [release-please](https://github.com/googleapis/release-please).
-Use [Conventional Commits](https://www.conventionalcommits.org/) in your PR titles
-and release-please will automatically create release PRs with version bumps and
-changelog updates.
+Releases are managed by [release-please](https://github.com/googleapis/release-please). Use [Conventional Commits](https://www.conventionalcommits.org/) in your PR titles and release-please will automatically create release PRs with version bumps and changelog updates.
 
 ### Publishing to Artifactory
 

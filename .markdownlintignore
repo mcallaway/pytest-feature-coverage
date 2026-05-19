@@ -1,2 +1,4 @@
 .specify/extensions/
 .specify/presets/
+.venv/
+tmp/
