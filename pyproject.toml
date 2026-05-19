@@ -5,6 +5,14 @@ description = "A pytest plugin that connects tests to requirements defined in YA
 authors = [{name = "Matt Callaway", email = "matt.callaway@bayer.com"}]
 requires-python = ">=3.14"
 readme = "README.md"
+dependencies = [
+    "pytest>=7.0",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.entry-points.pytest11]
+feature_coverage = "pytest_feature_coverage.plugin"
 
 [dependency-groups]
 dev = [
@@ -59,7 +67,8 @@ unfixable = ["B"]
 
 # TCH auto-fixes move imports into TYPE_CHECKING. This is safe when annotations
 # are not evaluated at runtime (e.g., no Pydantic models, no isinstance on types).
-# Disable this if you add runtime annotation consumers.
+# Disable this if you add runtime annotation consumers -- Pydantic models need
+# their annotations at runtime, so we exclude schema.py from TCH fixes.
 extend-safe-fixes = ["TCH"]
 
 [tool.ruff.lint.per-file-ignores]

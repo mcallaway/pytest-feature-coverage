@@ -1,0 +1,34 @@
+# Reference fixture exercising all valid schema constructs (FR-014)
+# Used as TDD fixture and living schema documentation.
+#
+# Demonstrates:
+# - Multiple components with multiple requirements
+# - A zero-requirement component (valid per clarification)
+# - Various requirement numbering
+
+feature:
+  id: "001"
+  name: sample-feature
+
+components:
+  PARSING:
+    name: Input parsing
+    requirements:
+      1: Parses valid input without error
+      2: Rejects malformed input with clear message
+      3: Handles empty input gracefully
+
+  PROCESSING:
+    name: Data processing
+    requirements:
+      1: Transforms input according to specification
+      2: Preserves data integrity during transformation
+
+  EMPTY:
+    name: Placeholder component
+    requirements: {}
+
+  OUTPUT:
+    name: Result output
+    requirements:
+      1: Produces deterministic output for identical input
