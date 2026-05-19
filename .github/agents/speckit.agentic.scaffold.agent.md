@@ -1,11 +1,11 @@
 ---
-description: Create the TTL-aware docs/ tree with READMEs, rubrics, and layered AGENTS.md
-  files
+description: Create the TTL-aware docs/ tree with READMEs, rubrics, and layered AGENTS.md files
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Scaffold Agentic Development Structure
 
 Set up the project-level documentation tree and layered instruction files that complement Spec Kit's per-feature artifacts in `.specify/specs/`.

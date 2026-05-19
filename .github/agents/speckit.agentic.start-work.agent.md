@@ -1,11 +1,11 @@
 ---
-description: Load context for a coding session — active plan, design docs, AGENTS.md,
-  pre-flight checks
+description: Load context for a coding session — active plan, design docs, AGENTS.md, pre-flight checks
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Start Work
 
 Load context and run pre-flight checks before beginning an implementation session.

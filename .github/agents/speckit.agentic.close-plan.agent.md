@@ -1,11 +1,11 @@
 ---
-description: Pre-merge finalization — update plan status, finalize ADRs, flag loose
-  ends
+description: Pre-merge finalization — update plan status, finalize ADRs, flag loose ends
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Close Plan
 
 Pre-merge finalization after `/speckit.agentic.review-pr` passes. Updates plan status, verifies documentation accuracy, finalizes ADRs, and flags loose ends.
