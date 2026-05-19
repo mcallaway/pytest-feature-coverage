@@ -125,6 +125,7 @@ ______________________________________________________________________
 - **FR-011**: System MUST fail collection when duplicate requirement IDs exist across feature YAML files
 - **FR-012**: System MUST be configurable via `pyproject.toml` under `[tool.pytest.ini_options]`; `feature_yaml_paths` is required (no default)
 - **FR-013**: System MUST produce identical output for identical inputs (determinism)
+- **FR-014**: Project MUST include a reference `*.feature.yaml` fixture in `tests/data/` that exercises all valid schema constructs (multiple components, multiple requirements per component, a zero-requirement component) to serve as both TDD fixture and living schema documentation
 
 ### Key Entities
 
