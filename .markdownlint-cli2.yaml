@@ -1,0 +1,11 @@
+globs:
+  - "**/*.md"
+
+ignores:
+  - ".claude/**"
+  - ".github/**"
+  # Managed by release-please; not guaranteed to match our markdown style.
+  - "CHANGELOG.md"
+  # Speckit vendor files (Layer 0) — overwritten on updates, not ours to fix.
+  - ".specify/extensions/**"
+  - ".specify/presets/**"

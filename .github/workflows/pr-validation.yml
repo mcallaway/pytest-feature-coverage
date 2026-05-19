@@ -1,0 +1,43 @@
+name: PR Validation
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.14"
+          allow-prereleases: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+
+      - name: Install dependencies
+        run: uv sync
+        env:
+          UV_INDEX_SHARED_PYTHON_PROD_SHARED_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          UV_INDEX_SHARED_PYTHON_PROD_SHARED_PASSWORD: ${{ secrets.ARTIFACTORY_SECRET }}
+
+      - name: Lint
+        run: |
+          uv run ruff check src tests
+          uv run ruff format --check src tests
+
+      - name: Type check
+        run: uv run ty check src
+
+      - name: Run unit tests
+        run: uv run pytest tests/unit -v

@@ -1,0 +1,26 @@
+# All hooks delegate to mise tasks so that pre-commit and daily CLI usage
+# share the same tool versions, arguments, and file selections.
+# Mise manages tool installation; pre-commit just triggers the tasks.
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint + format check)
+        entry: bash -c 'uv run ruff check src tests && uv run ruff format --check src tests'
+        language: system
+        types: [python]
+        # Intentionally checks full tree for consistency with CI.
+        pass_filenames: false
+
+      - id: lint-markdown
+        name: markdown (mdformat --check + markdownlint-cli2)
+        entry: mise run test:lint-markdown
+        language: system
+        types: [markdown]
+        pass_filenames: false
+
+      - id: gitleaks
+        name: gitleaks (secret scanning)
+        entry: mise run test:secrets
+        language: system
+        pass_filenames: false

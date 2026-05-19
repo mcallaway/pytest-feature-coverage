@@ -1,0 +1,56 @@
+# ABOUT: Dependabot configuration for automated dependency updates.
+#
+# Authenticates to Artifactory via OIDC (no stored secrets needed).
+# See: https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/manage-your-dependency-security/configuring-access-to-private-registries-for-dependabot#using-oidc-for-authentication
+
+version: 2
+
+# Private registry credentials for Dependabot to resolve internal packages.
+# Uses JFrog OIDC so Dependabot exchanges a GitHub-issued token for
+# Artifactory access — no long-lived secrets to rotate.
+registries:
+  artifactory-python:
+    type: python-index
+    url: https://artifactory.bayer.com/artifactory/api/pypi/shared-python-prod-shared/simple
+    jfrog-oidc-provider-name: github
+    audience: bayer-int
+    # replaces-base: false means Dependabot checks BOTH this registry and
+    # the default PyPI index. Our pyproject.toml marks this index as
+    # "explicit = true", so only packages that opt in resolve from here.
+    replaces-base: false
+
+updates:
+  # --- Python dependencies ---
+  # NOTE: In the template repo itself, the pip ecosystem fails because
+  # pyproject.toml.jinja has a Copier placeholder ({{ project_name }}).
+  # This is expected — Dependabot can't parse it. Repos created from the
+  # template will have a real name and work fine.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    # Allow all configured registries for package resolution.
+    registries: "*"
+    # The default limit is 5 open PRs. With grouped minor/patch updates
+    # that's usually fine, but raising it avoids silently skipping bumps
+    # when several major-version PRs are also open.
+    open-pull-requests-limit: 20
+    groups:
+      # Bundle minor and patch bumps into a single PR to reduce noise.
+      # Major version bumps get individual PRs for deliberate review.
+      nonMajor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # --- GitHub Actions ---
+  # Keeps pinned action SHAs current so we don't fall behind on
+  # security fixes in our CI tooling.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"

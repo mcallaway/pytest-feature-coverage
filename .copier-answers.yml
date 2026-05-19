@@ -1,0 +1,8 @@
+# Changes here will be overwritten by Copier; edit questions via `copier update`.
+_commit: 0.2.0
+_src_path: gh:bayer-int/pbt-dsa-de-python-template
+author_email: matt.callaway@bayer.com
+author_name: Matt Callaway
+project_description: A pytest plugin that connects tests to requirements defined in
+    YAML feature files and produces deterministic coverage reports
+project_name: pytest-feature-coverage

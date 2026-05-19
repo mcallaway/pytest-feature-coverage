@@ -1,0 +1,4 @@
+# Markdownlint configuration.
+# MD013 (line-length) is disabled because mdformat does not wrap prose to 80
+# characters, and mdformat is the canonical formatter for this project.
+MD013: false

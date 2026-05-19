@@ -1,0 +1,11 @@
+# Gitleaks configuration
+# https://github.com/gitleaks/gitleaks#configuration
+
+title = "gitleaks config"
+
+[allowlist]
+# Paths that gitleaks should ignore entirely.
+paths = [
+    '''.gitleaks.toml''',
+    '''\.copier-answers\.yml''',
+]

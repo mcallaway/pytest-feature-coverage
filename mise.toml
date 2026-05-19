@@ -1,0 +1,18 @@
+# Require mise 2025.8.11+ for #MISE task syntax support
+min_version = '2025.8.11'
+
+[tools]
+python = '3.14'
+uv = 'latest'
+# Node is required for npm:markdownlint-cli2 (no native alternative).
+node = 'latest'
+pre-commit = 'latest'
+gitleaks = 'latest'
+"npm:markdownlint-cli2" = 'latest'
+"pipx:mdformat" = { version = "latest", uvx_args = "--with mdformat-frontmatter --with mdformat-gfm" }
+
+[settings]
+python.uv_venv_auto = true
+
+[env]
+_.python.venv = { path = ".venv", create = true }
