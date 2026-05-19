@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "extensions": {
+    "git": {
+      "version": "1.0.0",
+      "source": "local",
+      "manifest_hash": "sha256:9731aa8143a72fbebfdb440f155038ab42642517c2b2bdbbf67c8fdbe076ed79",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "copilot": [
+          "speckit.git.feature",
+          "speckit.git.validate",
+          "speckit.git.remote",
+          "speckit.git.initialize",
+          "speckit.git.commit"
+        ]
+      },
+      "registered_skills": [],
+      "installed_at": "2026-05-19T19:05:02.520586+00:00"
+    },
+    "agentic": {
+      "version": "0.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:de1c455f3fdb6e9d6cf72281cf4ac9d6942e33a049fc388bfc70d376a69d8602",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "copilot": [
+          "speckit.agentic.scaffold",
+          "speckit.agentic.start-work",
+          "speckit.agentic.code-review",
+          "speckit.agentic.review-pr",
+          "speckit.agentic.review-alignment",
+          "speckit.agentic.apply-rubric",
+          "speckit.agentic.close-plan",
+          "speckit.agentic.document-decisions",
+          "speckit.agentic.extract-lessons",
+          "speckit.agentic.codebase-map",
+          "speckit.agentic.onboard"
+        ]
+      },
+      "registered_skills": [],
+      "installed_at": "2026-05-19T19:05:23.026029+00:00"
+    }
+  }
+}

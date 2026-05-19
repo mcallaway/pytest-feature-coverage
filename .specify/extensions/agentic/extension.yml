@@ -1,0 +1,90 @@
+schema_version: "1.0"
+
+extension:
+  id: "agentic"
+  name: "Agentic Development Workflow"
+  version: "0.1.0"
+  description: "TTL-aware project memory, rubric-driven quality, and lifecycle commands for durable shared understanding"
+  author: "bayer-int"
+  repository: "https://github.com/bayer-int/speckit-agentic-workflow"
+  license: "MIT"
+  homepage: "https://github.com/bayer-int/speckit-agentic-workflow"
+
+requires:
+  speckit_version: ">=0.8.0"
+  tools:
+    - name: "git"
+      required: false
+    - name: "gh"
+      required: false
+
+provides:
+  commands:
+    # --- Project scaffolding ---
+    - name: "speckit.agentic.scaffold"
+      file: "commands/scaffold.md"
+      description: "Create the TTL-aware docs/ tree with READMEs, rubrics, and layered AGENTS.md files"
+
+    # --- Session lifecycle ---
+    - name: "speckit.agentic.start-work"
+      file: "commands/start-work.md"
+      description: "Load context for a coding session — active plan, design docs, AGENTS.md, pre-flight checks"
+
+    # --- Review and quality ---
+    - name: "speckit.agentic.code-review"
+      file: "commands/code-review.md"
+      description: "Post-implementation code review — correctness, clarity, testing, conventions"
+
+    - name: "speckit.agentic.review-pr"
+      file: "commands/review-pr.md"
+      description: "Comprehensive pre-merge PR review — CI status, code, docs, staleness"
+
+    - name: "speckit.agentic.review-alignment"
+      file: "commands/review-alignment.md"
+      description: "Detect drift between code and documented design — two-way staleness check"
+
+    - name: "speckit.agentic.apply-rubric"
+      file: "commands/apply-rubric.md"
+      description: "Apply a rubric to artifacts for deterministic pass/fail evaluation"
+
+    # --- Knowledge capture ---
+    - name: "speckit.agentic.close-plan"
+      file: "commands/close-plan.md"
+      description: "Pre-merge finalization — update plan status, finalize ADRs, flag loose ends"
+
+    - name: "speckit.agentic.document-decisions"
+      file: "commands/document-decisions.md"
+      description: "Capture trade-offs and non-obvious choices as ADR drafts during implementation"
+
+    - name: "speckit.agentic.extract-lessons"
+      file: "commands/extract-lessons.md"
+      description: "Analyze recent commits for patterns and lessons, promote to durable docs"
+
+    - name: "speckit.agentic.codebase-map"
+      file: "commands/codebase-map.md"
+      description: "Create or refresh a feature-to-code mapping in docs/design/codebase-map.md"
+
+    # --- Onboarding ---
+    - name: "speckit.agentic.onboard"
+      file: "commands/onboard.md"
+      description: "Interactive project onboarding — walk a new engineer through the codebase"
+
+hooks:
+  after_plan:
+    command: "speckit.agentic.apply-rubric"
+    optional: true
+    prompt: "Evaluate plan against docs/plans/RUBRIC.md?"
+    description: "Apply the plan rubric to the newly created plan"
+
+  after_implement:
+    command: "speckit.agentic.code-review"
+    optional: true
+    prompt: "Run post-implementation code review?"
+    description: "Review code quality after implementation completes"
+
+tags:
+  - "workflow"
+  - "documentation"
+  - "review"
+  - "adr"
+  - "onboarding"
