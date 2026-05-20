@@ -25,8 +25,8 @@ The tests would fail if the behavior regressed.
 
 A new contributor can answer "where does this behavior live?" quickly.
 
-- CLI argument parsing is in `cortex/cli.py`.
-- Core logic lives in a testable module without Click/Rich dependencies.
+- Framework wiring is separated from core logic.
+- Core logic is testable without importing the host framework.
 - Names and module boundaries make future extension obvious.
 
 ## Signals code should be revised
