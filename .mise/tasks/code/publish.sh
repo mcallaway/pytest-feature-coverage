@@ -25,22 +25,32 @@ if [[ -z "${VERSION}" ]]; then
     exit 1
 fi
 
-# Check that a git tag exists for this version.
+# Fetch tags and verify a git tag exists for this version.
+git fetch --tags --quiet
 if ! git tag -l "$VERSION" | grep -q .; then
     echo "Error: No git tag found for version $VERSION"
+    echo "A GitHub release must exist before publishing."
     echo "Available tags:"
     git tag -l | tail -5
     exit 1
 fi
 
-# Verify dist files exist for this version.
-if ! ls dist/*-"${VERSION}"-py3-none-any.whl >/dev/null 2>&1; then
-    echo "Error: Expected wheel file not found: dist/*-${VERSION}-py3-none-any.whl"
-    echo "Run 'mise run code:build' first."
+# Verify build artifacts exist.
+if ! ls dist/*.tar.gz >/dev/null 2>&1 || ! ls dist/*.whl >/dev/null 2>&1; then
+    echo "Error: Expected sdist (.tar.gz) and wheel (.whl) not found in dist/"
+    echo "Run 'mise code:build' first."
     exit 1
 fi
 
-echo "Publishing version $VERSION (tag verified, artifacts present)..."
+# Extract credentials from ~/.netrc for Artifactory.
+# xref: https://docs.int.bayer.com/pbt-dsi/computing_environment_and_app_development/artifactory/artifactory/#storing-your-artifactory-token-in-netrc
+LOGIN=$(awk "/machine ${ARTIFACTORY_HOST}/{found=1} found && /login/{print \$2; exit}" ~/.netrc 2>/dev/null)
+PASSWORD=$(awk "/machine ${ARTIFACTORY_HOST}/{found=1} found && /password/{print \$2; exit}" ~/.netrc 2>/dev/null)
+if [[ -z "${LOGIN}" || -z "${PASSWORD}" ]]; then
+    echo "Error: ~/.netrc does not have login and password for ${ARTIFACTORY_HOST}"
+    echo "See: https://docs.int.bayer.com/pbt-dsi/computing_environment_and_app_development/artifactory/artifactory/#storing-your-artifactory-token-in-netrc"
+    exit 1
+fi
 
 # Verify Artifactory is configured in pyproject.toml.
 if ! grep -q '\[\[tool\.uv\.index\]\]' pyproject.toml; then
@@ -52,12 +62,6 @@ if ! grep -q "name = \"${ARTIFACTORY_REPO}\"" pyproject.toml; then
     exit 1
 fi
 
-# Ensure ~/.netrc has credentials for Artifactory.
-if ! grep -q "machine ${ARTIFACTORY_HOST}" ~/.netrc 2>/dev/null; then
-    echo "Error: ~/.netrc does not have a machine stanza for ${ARTIFACTORY_HOST}"
-    echo "See: https://docs.int.bayer.com/pbt-dsi/computing_environment_and_app_development/artifactory/artifactory/#storing-your-artifactory-token-in-netrc"
-    exit 1
-fi
+echo "Publishing version $VERSION..."
 
-# uv publish reads credentials from ~/.netrc automatically.
-uv publish --index ${ARTIFACTORY_REPO}
+uv publish --index "${ARTIFACTORY_REPO}" --username "${LOGIN}" --password "${PASSWORD}"
