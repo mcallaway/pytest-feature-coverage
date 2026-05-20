@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -62,7 +62,7 @@ def load_feature_file(path: Path) -> FeatureFileModel:
 
     try:
         return FeatureFileModel.model_validate(raw)
-    except Exception as e:
+    except ValidationError as e:
         msg = f'Validation error in {path}: {e}'
         raise FeatureFileLoadError(msg) from e
 

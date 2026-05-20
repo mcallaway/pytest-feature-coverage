@@ -1,4 +1,4 @@
-"""JSON format coverage reporter (FR-012)."""
+"""JSON format coverage reporter (FR-008)."""
 
 from __future__ import annotations
 

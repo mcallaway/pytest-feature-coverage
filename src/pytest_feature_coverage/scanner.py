@@ -1,4 +1,4 @@
-"""Scan test items for req() markers and detect orphans (FR-005, FR-006, FR-010)."""
+"""Scan test items for req() markers and detect orphans (FR-003, FR-004, FR-010)."""
 
 from __future__ import annotations
 

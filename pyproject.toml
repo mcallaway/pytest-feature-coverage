@@ -71,6 +71,9 @@ unfixable = ["B"]
 # their annotations at runtime, so we exclude schema.py from TCH fixes.
 extend-safe-fixes = ["TCH"]
 
+[tool.ruff.lint.mccabe]
+max-complexity = 7
+
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402"]
 "**/{tests,docs,tools}/*" = ["E402"]

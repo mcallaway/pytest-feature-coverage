@@ -1,4 +1,4 @@
-"""Coverage matrix computation (FR-007, FR-008, FR-009)."""
+"""Coverage matrix computation (FR-005)."""
 
 from __future__ import annotations
 

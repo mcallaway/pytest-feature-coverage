@@ -106,6 +106,14 @@ def _is_active(config: pytest.Config) -> bool:
     return getattr(config, _PLUGIN_ACTIVE_ATTR, False)
 
 
+def _get_threshold(config: pytest.Config) -> int:
+    """Resolve coverage threshold: CLI flag > INI option > default (0)."""
+    threshold = config.getoption('--feature-coverage-min')
+    if threshold is None:
+        threshold = int(config.getini('feature_coverage_min'))
+    return threshold
+
+
 def _get_known_requirement_ids(config: pytest.Config) -> set[str]:
     """Build set of all composite requirement IDs from loaded features."""
     state = getattr(config, _PLUGIN_STATE_ATTR, {})
@@ -182,10 +190,7 @@ def pytest_sessionfinish(session: pytest.Session) -> None:
 
     state = getattr(config, _PLUGIN_STATE_ATTR)
     report = state['report']
-
-    threshold = config.getoption('--feature-coverage-min')
-    if threshold is None:
-        threshold = int(config.getini('feature_coverage_min'))
+    threshold = _get_threshold(config)
 
     if threshold > 0 and report.coverage_percentage < threshold:
         state['_threshold_failed'] = True
@@ -229,10 +234,7 @@ def pytest_terminal_summary(
             terminalreporter.write_line(line)
 
     if state.get('_threshold_failed'):
-        threshold = config.getoption('--feature-coverage-min')
-        if threshold is None:
-            threshold = int(config.getini('feature_coverage_min'))
         terminalreporter.write_line(
             f'FAILED: Feature coverage {report.coverage_percentage:.1f}% '
-            f'is below minimum {threshold}%'
+            f'is below minimum {_get_threshold(config)}%'
         )

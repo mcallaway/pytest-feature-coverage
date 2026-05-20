@@ -1,4 +1,4 @@
-"""Markdown format coverage reporter (FR-013)."""
+"""Markdown format coverage reporter (FR-009)."""
 
 from __future__ import annotations
 
