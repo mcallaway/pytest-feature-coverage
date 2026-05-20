@@ -10,6 +10,20 @@ This guide is for developers who want to track which requirements are covered by
 - pytest >= 7.0
 - `pytest-feature-coverage` installed (e.g., via `pip install -e .` or as a dependency)
 
+> **Note:** To install from Artifactory, your project must have the index configured in `pyproject.toml`:
+>
+> ```toml
+> [[tool.uv.index]]
+> name = "shared-python-prod-shared"
+> url = "https://artifactory.bayer.com/artifactory/api/pypi/shared-python-prod-shared/simple"
+> ```
+>
+> Then add the dependency:
+>
+> ```bash
+> uv add pytest-feature-coverage --index shared-python-prod-shared --dev
+> ```
+
 ## Step 1: Define requirements in YAML
 
 Create `*.feature.yaml` files in a dedicated directory. Each file declares one feature with its components and numbered requirements.
