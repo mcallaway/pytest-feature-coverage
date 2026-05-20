@@ -4,12 +4,12 @@ A pytest plugin that connects tests to requirements defined in YAML feature file
 
 ## Project Status
 
-- [ ] The GitHub repo uses branch protection on `main`.
-- [ ] There is more than one owner/admin.
+- [x] There are non-trivial tests in `./tests`.
+- [x] There is an acceptable level of test coverage.
+- [x] CI/CD workflows pass on every PR.
+- [x] The GitHub repo uses branch protection on `main`.
+- [x] There is more than one owner/admin.
 - [ ] There is more than one contributor.
-- [ ] There are non-trivial tests in `./tests`.
-- [ ] There is an acceptable level of test coverage.
-- [ ] CI/CD workflows pass on every PR.
 
 ## Developer Setup
 
@@ -37,8 +37,52 @@ mise run dev:check
 
 ### Usage
 
+Add feature YAML files defining your requirements:
+
+```yaml
+# features/my-feature.feature.yaml
+feature:
+  id: "001"
+  name: my-feature
+
+components:
+  CORE:
+    name: Core logic
+    requirements:
+      1: Handles valid input
+      2: Rejects invalid input
+```
+
+Configure pytest (in `pyproject.toml`):
+
+```toml
+[tool.pytest.ini_options]
+feature_yaml_paths = ["features"]
+# feature_coverage_format = "text"  # text, json, or markdown
+# feature_coverage_min = 80         # fail if below 80%
+# feature_coverage_strict = true    # treat orphan markers as errors
+```
+
+Annotate tests with `req()` markers:
+
 ```python
-import pytest_feature_coverage
+import pytest
+
+@pytest.mark.req("my-feature.CORE.1")
+def test_handles_valid_input():
+    ...
+
+@pytest.mark.req("my-feature.CORE.1", "my-feature.CORE.2")
+def test_multiple_reqs():
+    ...
+```
+
+Run with coverage reporting:
+
+```shell
+pytest --feature-coverage
+pytest --feature-coverage --feature-coverage-format=json
+pytest --feature-coverage --feature-coverage-min=80
 ```
 
 ### Running Tests
@@ -53,10 +97,7 @@ mise run test:typecheck     # ty type checker
 
 ### Creating Releases
 
-Releases are managed by [release-please](https://github.com/googleapis/release-please).
-Use [Conventional Commits](https://www.conventionalcommits.org/) in your PR titles
-and release-please will automatically create release PRs with version bumps and
-changelog updates.
+Releases are managed by [release-please](https://github.com/googleapis/release-please). Use [Conventional Commits](https://www.conventionalcommits.org/) in your PR titles and release-please will automatically create release PRs with version bumps and changelog updates.
 
 ### Publishing to Artifactory
 

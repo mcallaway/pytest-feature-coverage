@@ -2,9 +2,10 @@
 description: Interactive project onboarding — walk a new engineer through the codebase
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Onboard
 
 Interactive onboarding guide for a new engineer (human or agent) joining the project.

@@ -2,9 +2,10 @@
 description: Capture trade-offs and non-obvious choices as ADR drafts during implementation
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Document Decisions
 
 Capture trade-offs and non-obvious choices made during implementation as Architecture Decision Records.

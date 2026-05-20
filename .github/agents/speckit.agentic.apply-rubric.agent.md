@@ -2,9 +2,10 @@
 description: Apply a rubric to artifacts for deterministic pass/fail evaluation
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Apply Rubric
 
 Apply a rubric to one or more artifacts and produce a deterministic pass/fail report. Optionally make minimal fixes for failing criteria.

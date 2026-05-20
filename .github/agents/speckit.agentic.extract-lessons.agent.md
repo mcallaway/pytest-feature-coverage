@@ -2,9 +2,10 @@
 description: Analyze recent commits for patterns and lessons, promote to durable docs
 ---
 
-
 <!-- Extension: agentic -->
+
 <!-- Config: .specify/extensions/agentic/ -->
+
 # Extract Lessons
 
 Analyze recent commits to surface patterns, implicit decisions, debugging insights, and lessons learned. Recommend promotion to durable documentation.
