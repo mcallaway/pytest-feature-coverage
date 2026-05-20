@@ -163,9 +163,9 @@
 
 **Purpose**: Final cleanup, documentation, and quality verification
 
-- [ ] T043 Verify all ruff lint and ty type-check passes across src/ and tests/
-- [ ] T044 Verify determinism: run acceptance test suite twice, confirm identical output
-- [ ] T045 Update README.md with usage documentation and installation instructions
+- [x] T043 Verify all ruff lint and ty type-check passes across src/ and tests/
+- [x] T044 Verify determinism: run acceptance test suite twice, confirm identical output
+- [x] T045 Update README.md with usage documentation and installation instructions
 
 ## Dependencies
 

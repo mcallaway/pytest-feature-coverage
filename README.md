@@ -37,8 +37,52 @@ mise run dev:check
 
 ### Usage
 
+Add feature YAML files defining your requirements:
+
+```yaml
+# features/my-feature.feature.yaml
+feature:
+  id: "001"
+  name: my-feature
+
+components:
+  CORE:
+    name: Core logic
+    requirements:
+      1: Handles valid input
+      2: Rejects invalid input
+```
+
+Configure pytest (in `pyproject.toml`):
+
+```toml
+[tool.pytest.ini_options]
+feature_yaml_paths = ["features"]
+# feature_coverage_format = "text"  # text, json, or markdown
+# feature_coverage_min = 80         # fail if below 80%
+# feature_coverage_strict = true    # treat orphan markers as errors
+```
+
+Annotate tests with `req()` markers:
+
 ```python
-import pytest_feature_coverage
+import pytest
+
+@pytest.mark.req("my-feature.CORE.1")
+def test_handles_valid_input():
+    ...
+
+@pytest.mark.req("my-feature.CORE.1", "my-feature.CORE.2")
+def test_multiple_reqs():
+    ...
+```
+
+Run with coverage reporting:
+
+```shell
+pytest --feature-coverage
+pytest --feature-coverage --feature-coverage-format=json
+pytest --feature-coverage --feature-coverage-min=80
 ```
 
 ### Running Tests
