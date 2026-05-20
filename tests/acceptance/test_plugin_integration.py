@@ -266,7 +266,15 @@ class TestDeterminism:
                 if 'Feature Coverage' in line:
                     start = i
                     break
-            return lines[start:] if start is not None else []
+            if start is None:
+                return []
+            # Take lines after the header until the next separator or end
+            section = []
+            for line in lines[start + 1 :]:
+                if line.startswith('===='):
+                    break
+                section.append(line)
+            return section
 
         section1 = extract_coverage_section(result1.stdout.lines)
         section2 = extract_coverage_section(result2.stdout.lines)

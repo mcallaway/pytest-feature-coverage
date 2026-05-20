@@ -155,17 +155,14 @@ def pytest_collection_modifyitems(
             )
 
 
-def pytest_terminal_summary(
-    terminalreporter: pytest.TerminalReporter, config: pytest.Config
-) -> None:
-    """Print the feature coverage report."""
-    if not _is_active(config):
-        return
-
+def _compute_and_store_report(config: pytest.Config) -> None:
+    """Compute coverage report and store on config state."""
     from .matrix import compute_coverage
-    from .reporters.text import render_text
 
     state = getattr(config, _PLUGIN_STATE_ATTR)
+    if 'report' in state:
+        return
+
     features = state['features']
     req_map = state.get('req_map', {})
     orphans = state.get('orphans', [])
@@ -173,6 +170,42 @@ def pytest_terminal_summary(
     report = compute_coverage(features, req_map)
     report.orphan_markers = orphans
     state['report'] = report
+
+
+def pytest_sessionfinish(session: pytest.Session) -> None:
+    """Set exit code if coverage is below threshold."""
+    if not _is_active(session.config):
+        return
+
+    config = session.config
+    _compute_and_store_report(config)
+
+    state = getattr(config, _PLUGIN_STATE_ATTR)
+    report = state['report']
+
+    threshold = config.getoption('--feature-coverage-min')
+    if threshold is None:
+        threshold = int(config.getini('feature_coverage_min'))
+
+    if threshold > 0 and report.coverage_percentage < threshold:
+        state['_threshold_failed'] = True
+        session.exitstatus = 2
+
+
+def pytest_terminal_summary(
+    terminalreporter: pytest.TerminalReporter,
+    exitstatus: int,
+    config: pytest.Config,
+) -> None:
+    """Print the feature coverage report."""
+    if not _is_active(config):
+        return
+
+    from .reporters.text import render_text
+
+    _compute_and_store_report(config)
+    state = getattr(config, _PLUGIN_STATE_ATTR)
+    report = state['report']
 
     # Determine format
     fmt = config.getoption('--feature-coverage-format') or config.getini(
@@ -188,3 +221,12 @@ def pytest_terminal_summary(
     terminalreporter.section('Feature Coverage')
     for line in lines:
         terminalreporter.write_line(line)
+
+    if state.get('_threshold_failed'):
+        threshold = config.getoption('--feature-coverage-min')
+        if threshold is None:
+            threshold = int(config.getini('feature_coverage_min'))
+        terminalreporter.write_line(
+            f'FAILED: Feature coverage {report.coverage_percentage:.1f}% '
+            f'is below minimum {threshold}%'
+        )

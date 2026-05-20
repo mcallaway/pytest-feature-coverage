@@ -112,12 +112,12 @@
 
 ### Tests for User Story 4
 
-- [ ] T030 [P] [US4] Write acceptance tests for threshold behavior (below, above, zero default) in tests/acceptance/test_ci_threshold.py
+- [x] T030 [P] [US4] Write acceptance tests for threshold behavior (below, above, zero default) in tests/acceptance/test_ci_threshold.py
 
 ### Implementation for User Story 4
 
-- [ ] T031 [US4] Implement threshold check in pytest_sessionfinish hook in src/pytest_feature_coverage/plugin.py
-- [ ] T032 [US4] Add "FAILED: Feature coverage X% is below minimum Y%" message to text reporter in src/pytest_feature_coverage/reporters/text.py
+- [x] T031 [US4] Implement threshold check in pytest_sessionfinish hook in src/pytest_feature_coverage/plugin.py
+- [x] T032 [US4] Add "FAILED: Feature coverage X% is below minimum Y%" message to text reporter in src/pytest_feature_coverage/reporters/text.py
 
 **Checkpoint**: CI gating works; exit code reflects coverage vs threshold
 
