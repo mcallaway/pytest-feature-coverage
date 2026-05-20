@@ -9,7 +9,7 @@ See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `a
 
 ## Current Focus
 
-- **001-feature-coverage-plugin**: pytest plugin for requirement-to-test coverage tracking. [Plan](../../specs/001-feature-coverage-plugin/plan.md) | [Spec](../../specs/001-feature-coverage-plugin/spec.md)
+<!-- No active plans -->
 
 ## Next Steps
 
@@ -17,4 +17,4 @@ See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `a
 
 ## Completed
 
-<!-- Closed plans move here with a one-line summary -->
+- **001-feature-coverage-plugin**: pytest plugin for requirement-to-test coverage tracking. [Plan](../../specs/001-feature-coverage-plugin/plan.md) | [Spec](../../specs/001-feature-coverage-plugin/spec.md) — Closed 2025-05-20
