@@ -129,16 +129,16 @@
 
 ### Tests for User Story 5
 
-- [ ] T033 [P] [US5] Write unit tests for JSON reporter (structure matches contract) in tests/unit/test_reporters.py
-- [ ] T034 [P] [US5] Write unit tests for Markdown reporter (table format matches contract) in tests/unit/test_reporters.py
+- [x] T033 [P] [US5] Write unit tests for JSON reporter (structure matches contract) in tests/unit/test_reporters.py
+- [x] T034 [P] [US5] Write unit tests for Markdown reporter (table format matches contract) in tests/unit/test_reporters.py
 
 ### Implementation for User Story 5
 
-- [ ] T035 [US5] Implement JsonReporter in src/pytest_feature_coverage/reporters/json.py
-- [ ] T036 [US5] Implement MarkdownReporter in src/pytest_feature_coverage/reporters/markdown.py
-- [ ] T037 [US5] Wire format selection into pytest_terminal_summary hook in src/pytest_feature_coverage/plugin.py
-- [ ] T038 [US5] Write acceptance test: JSON output is valid and matches contract schema in tests/acceptance/test_plugin_integration.py
-- [ ] T039 [US5] Write acceptance test: Markdown output matches contract format in tests/acceptance/test_plugin_integration.py
+- [x] T035 [US5] Implement JsonReporter in src/pytest_feature_coverage/reporters/json.py
+- [x] T036 [US5] Implement MarkdownReporter in src/pytest_feature_coverage/reporters/markdown.py
+- [x] T037 [US5] Wire format selection into pytest_terminal_summary hook in src/pytest_feature_coverage/plugin.py
+- [x] T038 [US5] Write acceptance test: JSON output is valid and matches contract schema in tests/acceptance/test_plugin_integration.py
+- [x] T039 [US5] Write acceptance test: Markdown output matches contract format in tests/acceptance/test_plugin_integration.py
 
 **Checkpoint**: All three output formats work correctly
 

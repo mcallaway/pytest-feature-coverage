@@ -212,15 +212,21 @@ def pytest_terminal_summary(
         'feature_coverage_format'
     )
 
-    if fmt == 'text':
-        lines = render_text(report)
-    else:
-        # JSON and markdown handled in later phases
-        lines = render_text(report)
+    if fmt == 'json':
+        from .reporters.json import render_json
 
-    terminalreporter.section('Feature Coverage')
-    for line in lines:
-        terminalreporter.write_line(line)
+        terminalreporter.section('Feature Coverage')
+        terminalreporter.write_line(render_json(report))
+    elif fmt == 'markdown':
+        from .reporters.markdown import render_markdown
+
+        terminalreporter.section('Feature Coverage')
+        terminalreporter.write_line(render_markdown(report))
+    else:
+        lines = render_text(report)
+        terminalreporter.section('Feature Coverage')
+        for line in lines:
+            terminalreporter.write_line(line)
 
     if state.get('_threshold_failed'):
         threshold = config.getoption('--feature-coverage-min')

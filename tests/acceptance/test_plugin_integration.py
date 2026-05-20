@@ -299,3 +299,87 @@ class TestNoYAMLFilesFound:
         result = pytester.runpytest('--feature-coverage')
         result.assert_outcomes(passed=1)
         result.stdout.fnmatch_lines(['*Overall: 0/0*'])
+
+
+class TestJSONOutput:
+    """T038: JSON output is valid and matches contract."""
+
+    def test_json_output(self, pytester):
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result = pytester.runpytest(
+            '--feature-coverage', '--feature-coverage-format=json'
+        )
+        result.assert_outcomes(passed=1)
+        # Find JSON in output
+        import json
+
+        stdout = '\n'.join(result.stdout.lines)
+        # Extract JSON block (starts with {)
+        start = stdout.index('{')
+        end = stdout.rindex('}') + 1
+        data = json.loads(stdout[start:end])
+        assert data['overall']['covered'] == 1
+        assert data['overall']['total'] == 1
+        assert data['features'][0]['name'] == 'app'
+
+
+class TestMarkdownOutput:
+    """T039: Markdown output matches contract format."""
+
+    def test_markdown_output(self, pytester):
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result = pytester.runpytest(
+            '--feature-coverage', '--feature-coverage-format=markdown'
+        )
+        result.assert_outcomes(passed=1)
+        result.stdout.fnmatch_lines(
+            [
+                '*# Feature Coverage Report*',
+                '*## app (001)*',
+                '*### CORE*',
+                '*| 1 | First |*',
+                '*| **Overall** |*',
+            ]
+        )
