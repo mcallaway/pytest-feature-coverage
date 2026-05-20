@@ -53,8 +53,8 @@ Configured under `[tool.pytest.ini_options]`. CLI flags override INI values.
 | Code | Meaning                                                |
 | ---- | ------------------------------------------------------ |
 | 0    | All tests passed AND coverage >= threshold             |
-| 1    | Tests failed OR coverage < threshold                   |
-| 2    | Interrupted                                            |
+| 1    | Tests failed (normal pytest failure)                   |
+| 2    | Coverage below threshold OR interrupted                |
 | 3    | Internal error                                         |
 | 4    | Usage error (e.g., no `feature_yaml_paths` configured) |
 
@@ -134,12 +134,11 @@ Overall: {covered}/{total} requirements covered ({percentage}%)
 
 ## Error Messages
 
-| Condition                          | Output                                                                                                                                |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| No `feature_yaml_paths` configured | `ERROR: feature_yaml_paths not configured in pyproject.toml. Add [tool.pytest.ini_options] feature_yaml_paths = ["path/to/features"]` |
-| Invalid YAML schema                | `ERROR: {filepath}: Validation failed\n  {field_path}: {message}`                                                                     |
-| Duplicate feature name             | `ERROR: Duplicate feature name '{name}' in {file1} and {file2}`                                                                       |
-| Duplicate requirement ID           | `ERROR: Duplicate requirement ID '{composite_id}' in {file1} and {file2}`                                                             |
-| Orphan marker (warning)            | `WARNING: req() marker '{id}' in {test_nodeid} does not match any known requirement`                                                  |
-| Orphan marker (strict)             | `ERROR: req() marker '{id}' in {test_nodeid} does not match any known requirement (strict mode)`                                      |
-| Coverage below threshold           | `FAILED: Feature coverage {actual}% is below minimum {threshold}%`                                                                    |
+| Condition                          | Output                                                                                                   |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| No `feature_yaml_paths` configured | `ERROR: feature-coverage: 'feature_yaml_paths' INI option is required when --feature-coverage is active` |
+| Invalid YAML schema                | `ERROR: Validation error in {filepath}: {pydantic_error_details}`                                        |
+| Duplicate feature name             | `ERROR: Duplicate feature name '{name}' found in {file1} and {file2}`                                    |
+| Orphan marker (warning)            | `WARNING: feature-coverage: req('{id}') does not match any known requirement`                            |
+| Orphan marker (strict)             | `ERROR: feature-coverage: orphan req() markers found (strict mode): {id1}, {id2}, ...`                   |
+| Coverage below threshold           | `FAILED: Feature coverage {actual}% is below minimum {threshold}%`                                       |

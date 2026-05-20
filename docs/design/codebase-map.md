@@ -40,7 +40,7 @@ pytest-feature-coverage/
 
 | Package/Module                               | Purpose                                                                                                                                   | Key Files               |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `pytest_feature_coverage.plugin`             | pytest hook wiring, CLI/INI options, activation guard                                                                                     | `plugin.py`             |
+| `pytest_feature_coverage.plugin`             | pytest hook wiring, CLI/INI options, activation guard, threshold resolution                                                               | `plugin.py`             |
 | `pytest_feature_coverage.schema`             | Pydantic models (`FeatureFileModel`, `ComponentModel`, `FeatureModel`), `load_feature_file()`, `load_all_features()`, duplicate detection | `schema.py`             |
 | `pytest_feature_coverage.scanner`            | `scan_requirements()` from `req()` markers, `find_orphans()`                                                                              | `scanner.py`            |
 | `pytest_feature_coverage.matrix`             | `compute_coverage()`, `CoverageEntry`, `CoverageReport` dataclasses                                                                       | `matrix.py`             |
