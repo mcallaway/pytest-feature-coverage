@@ -383,3 +383,99 @@ class TestMarkdownOutput:
                 '*| **Overall** |*',
             ]
         )
+
+
+class TestConfigResolution:
+    """T040: INI option precedence — config defaults, CLI overrides."""
+
+    def test_ini_format_default(self, pytester):
+        """INI feature_coverage_format is used when CLI not provided."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+            feature_coverage_format = json
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage')
+        result.assert_outcomes(passed=1)
+        # JSON output should be present
+        stdout = '\n'.join(result.stdout.lines)
+        assert '"features"' in stdout
+
+    def test_cli_overrides_ini(self, pytester):
+        """CLI --feature-coverage-format overrides INI setting."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+            feature_coverage_format = json
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result = pytester.runpytest(
+            '--feature-coverage', '--feature-coverage-format=text'
+        )
+        result.assert_outcomes(passed=1)
+        result.stdout.fnmatch_lines(['*Feature: app (001)*'])
+
+    def test_ini_min_threshold(self, pytester):
+        """INI feature_coverage_min is used when CLI not provided."""
+        features_dir = pytester.mkdir('features')
+        (features_dir / 'app.feature.yaml').write_text(
+            'feature:\n'
+            "  id: '001'\n"
+            '  name: app\n'
+            'components:\n'
+            '  CORE:\n'
+            '    name: Core\n'
+            '    requirements:\n'
+            '      1: First\n'
+            '      2: Second\n'
+        )
+        pytester.makeini("""
+            [pytest]
+            feature_yaml_paths = features
+            feature_coverage_min = 100
+        """)
+        pytester.makepyfile("""
+            import pytest
+
+            @pytest.mark.req("app.CORE.1")
+            def test_one():
+                pass
+        """)
+        result = pytester.runpytest('--feature-coverage')
+        assert result.ret != 0
+        result.stdout.fnmatch_lines(['*below minimum*'])

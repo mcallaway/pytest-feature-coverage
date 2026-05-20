@@ -150,12 +150,12 @@
 
 ### Tests for User Story 6
 
-- [ ] T040 [P] [US6] Write acceptance tests for INI option precedence (config defaults, CLI overrides) in tests/acceptance/test_plugin_integration.py
+- [x] T040 [P] [US6] Write acceptance tests for INI option precedence (config defaults, CLI overrides) in tests/acceptance/test_plugin_integration.py
 
 ### Implementation for User Story 6
 
-- [ ] T041 [US6] Ensure all INI options are registered with correct types and defaults in src/pytest_feature_coverage/plugin.py
-- [ ] T042 [US6] Implement config resolution: CLI flag > INI option > hardcoded default in src/pytest_feature_coverage/plugin.py
+- [x] T041 [US6] Ensure all INI options are registered with correct types and defaults in src/pytest_feature_coverage/plugin.py
+- [x] T042 [US6] Implement config resolution: CLI flag > INI option > hardcoded default in src/pytest_feature_coverage/plugin.py
 
 **Checkpoint**: Configuration works from pyproject.toml with CLI override
 
