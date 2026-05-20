@@ -4,12 +4,12 @@ A pytest plugin that connects tests to requirements defined in YAML feature file
 
 ## Project Status
 
-- [ ] The GitHub repo uses branch protection on `main`.
-- [ ] There is more than one owner/admin.
+- [x] There are non-trivial tests in `./tests`.
+- [x] There is an acceptable level of test coverage.
+- [x] CI/CD workflows pass on every PR.
+- [x] The GitHub repo uses branch protection on `main`.
+- [x] There is more than one owner/admin.
 - [ ] There is more than one contributor.
-- [ ] There are non-trivial tests in `./tests`.
-- [ ] There is an acceptable level of test coverage.
-- [ ] CI/CD workflows pass on every PR.
 
 ## Developer Setup
 
