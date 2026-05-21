@@ -6,7 +6,7 @@ authors = [{name = "Matt Callaway", email = "matt.callaway@bayer.com"}]
 requires-python = ">=3.14"
 readme = "README.md"
 dependencies = [
-    "pytest>=7.0",
+    "pytest>=9.0.3",
     "pydantic>=2.0",
     "pyyaml>=6.0",
 ]
@@ -20,7 +20,7 @@ dev = [
     "mdformat-frontmatter>=2.0.0",
     "mdformat-gfm>=0.4.0",
     "packaging>=24.0",
-    "pytest>=8.4.2,<9",
+    "pytest>=9.0.3",
     "ruff>=0.11,<1",
     "ty>=0.0.1a0",
 ]
