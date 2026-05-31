@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2](https://github.com/mcallaway/pytest-feature-coverage/compare/0.1.1...0.1.2) (2026-05-31)
+
+
+### Features
+
+* add coverage and feature-coverage mise test tasks ([c3dfdd3](https://github.com/mcallaway/pytest-feature-coverage/commit/c3dfdd37e2b1c04ad0f28ff0c5cf8e6bd55aa0c9))
+
+
+### Bug Fixes
+
+* **deps:** bump pytest&gt;=9.0.3 to address tmpdir vulnerability ([1c6ddc4](https://github.com/mcallaway/pytest-feature-coverage/commit/1c6ddc41e731afc02cd407b13eb7d733629b12db))
+* simplify build task, fix publish credentials ([881f7ed](https://github.com/mcallaway/pytest-feature-coverage/commit/881f7ed25b1baaaf9b7ddff792bcf17124d05e44))
+
+
+### Documentation
+
+* add Artifactory install note to usage guide ([843ce98](https://github.com/mcallaway/pytest-feature-coverage/commit/843ce980f534a658f84eb86653becc3849fc4131))
+
 ## [0.1.1](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.0...0.1.1) (2026-05-20)
 
 
