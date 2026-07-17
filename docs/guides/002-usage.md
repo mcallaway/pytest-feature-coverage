@@ -7,7 +7,7 @@ This guide is for developers who want to track which requirements are covered by
 ## Prerequisites
 
 - Python >= 3.14
-- pytest >= 7.0
+- pytest >= 9.0
 - `pytest-feature-coverage` installed (e.g., via `pip install -e .` or as a dependency)
 
 > **Note:** To install from Artifactory, your project must have the index configured in `pyproject.toml`:
@@ -176,6 +176,46 @@ Overall: 3/5 requirements covered (60.0%)
   "orphan_markers": []
 }
 ```
+
+## Running with mise
+
+If your project uses [mise](https://mise.jdx.dev/), add a task file at `.mise/tasks/test/features.sh`:
+
+```bash
+#!/usr/bin/env bash
+#MISE description="Run pytest feature coverage report."
+
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+if [[ ! -d "tests" ]]; then
+    echo "No tests directory found, skipping feature coverage."
+    exit 0
+fi
+
+# Examples:
+#   mise run test:features
+#   mise run test:features -- --feature-coverage-min=80
+#   mise run test:features -- -k "auth"
+uv run pytest --feature-coverage -q tests/ "$@"
+```
+
+Make it executable with `chmod +x .mise/tasks/test/features.sh`, then run:
+
+```bash
+mise run test:features
+```
+
+For simple projects a `mise.toml` one-liner is enough:
+
+```toml
+[tasks."test:features"]
+description = "Run pytest feature coverage report."
+run = "pytest --feature-coverage -q tests/"
+```
+
+The shell file approach is preferred when you need to pass extra flags (`"$@"`), guard against missing test directories, or run from a consistent working directory.
 
 ## Troubleshooting
 
