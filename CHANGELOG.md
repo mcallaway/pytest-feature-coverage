@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.1...0.1.2) (2026-07-18)
+
+
+### Features
+
+* dogfood plugin, integration tests, 100% coverage, ADRs, testing guide ([#16](https://github.com/bayer-int/pytest-feature-coverage/issues/16)) ([2ba6735](https://github.com/bayer-int/pytest-feature-coverage/commit/2ba6735a04c84c5b0fbfc1a060ada8ce5995b820))
+
+
+### Bug Fixes
+
+* standardize mise test:features task ([#15](https://github.com/bayer-int/pytest-feature-coverage/issues/15)) ([0915b87](https://github.com/bayer-int/pytest-feature-coverage/commit/0915b87b49d2110e2a6a7a275525799b0071ab28))
+
 ## [0.1.1](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.0...0.1.1) (2026-05-20)
 
 
