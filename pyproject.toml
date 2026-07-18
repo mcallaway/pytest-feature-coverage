@@ -21,6 +21,7 @@ dev = [
     "mdformat-gfm>=0.4.0",
     "packaging>=24.0",
     "pytest>=9.0.3",
+    "pytest-cov>=6.0",
     "ruff>=0.11,<1",
     "ty>=0.0.1a0",
 ]
@@ -75,6 +76,8 @@ extend-safe-fixes = ["TCH"]
 max-complexity = 7
 
 [tool.ruff.lint.per-file-ignores]
+# E402 (module-level import not at top): __init__.py and test/doc/tool files
+# legitimately use deferred or conditional imports.
 "__init__.py" = ["E402"]
 "**/{tests,docs,tools}/*" = ["E402"]
 
@@ -83,6 +86,28 @@ max-complexity = 7
 quote-style = "single"
 
 ## -- End Ruff configuration
+
+[tool.pytest.ini_options]
+feature_yaml_paths = ["features"]
+markers = [
+    "integration: pytester-based end-to-end plugin tests (excluded from coverage runs)",
+    "req(*ids): associate test with requirement IDs from feature YAML files",
+]
+
+[tool.coverage.run]
+# Run coverage via 'mise test:coverage' (which passes -p no:feature_coverage).
+# Running 'pytest --cov' directly will show ~75% because the plugin is loaded
+# as an entry-point before pytest-cov starts — see docs/decisions/002-*.md.
+source = ["src/pytest_feature_coverage"]
+
+[tool.coverage.report]
+exclude_lines = [
+    # Pytest hook functions are loaded as entry-points before pytest-cov starts;
+    # they are tested by the integration suite, not the unit coverage run.
+    "pragma: no cover",
+    # TYPE_CHECKING blocks are never executed at runtime.
+    "if TYPE_CHECKING:",
+]
 
 [tool.ty.environment]
 python-version = "3.14"

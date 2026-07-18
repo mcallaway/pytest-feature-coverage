@@ -10,4 +10,4 @@ set -o errexit
 
 cd "$(git rev-parse --show-toplevel)"
 
-uv run pytest --cov --cov-branch --cov-report=term -m "not acceptance" tests/
+uv run pytest --cov --cov-branch --cov-report=term -m "not integration" -p no:feature_coverage tests/

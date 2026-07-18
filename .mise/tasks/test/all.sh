@@ -11,5 +11,5 @@ set -o errexit
 mise run test:lint
 mise run test:typecheck
 mise run test:unit
-mise run test:acceptance
+mise run test:integration
 mise run test:secrets

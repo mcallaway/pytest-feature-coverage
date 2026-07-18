@@ -2,27 +2,26 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock
+import types
+
+import pytest
 
 
-def _make_item(marker_args_list: list[tuple[str, ...]]) -> MagicMock:
-    """Create a mock pytest Item with req markers."""
-    markers = []
-    for args in marker_args_list:
-        m = MagicMock()
-        m.args = args
-        m.kwargs = {}
-        markers.append(m)
-
-    item = MagicMock()
-    item.iter_markers.return_value = markers
-    item.nodeid = 'test_file.py::test_example'
-    return item
+def _make_item(
+    marker_args_list: list[tuple[str, ...]], nodeid: str = 'test_file.py::test_example'
+) -> types.SimpleNamespace:
+    """Create a stub pytest Item with req markers."""
+    markers = [types.SimpleNamespace(args=args, kwargs={}) for args in marker_args_list]
+    return types.SimpleNamespace(
+        nodeid=nodeid,
+        iter_markers=lambda name: iter(markers),
+    )
 
 
 class TestScanRequirements:
     """T016: Unit tests for scanner."""
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.1')
     def test_single_marker_single_arg(self) -> None:
         from pytest_feature_coverage.scanner import scan_requirements
 
@@ -30,6 +29,7 @@ class TestScanRequirements:
         result = scan_requirements([item])
         assert result == {'feat.COMP.1': ['test_file.py::test_example']}
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.2')
     def test_single_marker_multiple_args(self) -> None:
         from pytest_feature_coverage.scanner import scan_requirements
 
@@ -39,6 +39,7 @@ class TestScanRequirements:
         assert 'feat.COMP.2' in result
         assert result['feat.COMP.1'] == ['test_file.py::test_example']
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.1')
     def test_multiple_markers(self) -> None:
         from pytest_feature_coverage.scanner import scan_requirements
 
@@ -54,6 +55,7 @@ class TestScanRequirements:
         result = scan_requirements([item])
         assert result == {}
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.1')
     def test_multiple_items_same_req(self) -> None:
         from pytest_feature_coverage.scanner import scan_requirements
 
@@ -68,6 +70,8 @@ class TestScanRequirements:
 
 class TestOrphanDetection:
     """T019: Orphan marker detection."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.REQ_MARKER.3')
 
     def test_detects_orphans(self) -> None:
         from pytest_feature_coverage.scanner import find_orphans

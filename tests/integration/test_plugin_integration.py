@@ -1,10 +1,16 @@
-"""Acceptance tests for plugin integration using pytester."""
+"""Integration tests for plugin integration using pytester."""
 
 from __future__ import annotations
+
+import pytest
+
+pytestmark = pytest.mark.integration
 
 
 class TestValidYAMLLoads:
     """T013: Valid YAML loads without error."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
 
     def test_valid_yaml_loads_and_plugin_activates(self, pytester):
         """Plugin activates and loads valid YAML without errors."""
@@ -33,6 +39,8 @@ class TestValidYAMLLoads:
 
 class TestInvalidYAMLFailsCollection:
     """T014: Invalid YAML fails collection with clear error."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
 
     def test_invalid_yaml_schema_fails(self, pytester):
         """Invalid schema produces UsageError mentioning the file."""
@@ -70,8 +78,8 @@ class TestInvalidYAMLFailsCollection:
 class TestMissingConfig:
     """T015: Missing feature_yaml_paths config emits error."""
 
+    @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.3')
     def test_missing_feature_yaml_paths_errors(self, pytester):
-        """Plugin errors when feature_yaml_paths is not configured."""
         pytester.makepyfile("""
             def test_placeholder():
                 pass
@@ -79,6 +87,7 @@ class TestMissingConfig:
         result = pytester.runpytest('--feature-coverage')
         result.stderr.fnmatch_lines(['*feature_yaml_paths*'])
 
+    @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.1')
     def test_plugin_inactive_without_flag(self, pytester):
         """Plugin is inert when --feature-coverage is not passed."""
         pytester.makepyfile("""
@@ -93,6 +102,9 @@ class TestMissingConfig:
 class TestReqMarkersCollected:
     """T020: req() markers collected and associated correctly."""
 
+    @pytest.mark.req(
+        'feature-coverage-plugin.REQ_MARKER.1', 'feature-coverage-plugin.REQ_MARKER.2'
+    )
     def test_markers_are_collected(self, pytester):
         """req() markers map tests to requirements."""
         features_dir = pytester.mkdir('features')
@@ -129,8 +141,8 @@ class TestReqMarkersCollected:
 class TestOrphanMarkerWarning:
     """T021: Orphan marker emits warning."""
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.3')
     def test_orphan_marker_warns(self, pytester):
-        """Orphan req() emits warning by default."""
         features_dir = pytester.mkdir('features')
         (features_dir / 'app.feature.yaml').write_text(
             'feature:\n'
@@ -157,8 +169,8 @@ class TestOrphanMarkerWarning:
         result.assert_outcomes(passed=1)
         result.stdout.fnmatch_lines(['*app.CORE.99*'])
 
+    @pytest.mark.req('feature-coverage-plugin.REQ_MARKER.4')
     def test_orphan_marker_strict_errors(self, pytester):
-        """Orphan req() errors in strict mode."""
         features_dir = pytester.mkdir('features')
         (features_dir / 'app.feature.yaml').write_text(
             'feature:\n'
@@ -188,6 +200,8 @@ class TestOrphanMarkerWarning:
 
 class TestTextReport:
     """T027: Full text report output matches expected format."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.1')
 
     def test_text_report_output(self, pytester):
         """Full end-to-end text report with covered and uncovered reqs."""
@@ -231,6 +245,8 @@ class TestTextReport:
 
 class TestDeterminism:
     """T028: Determinism — identical output on repeated runs."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.2')
 
     def test_deterministic_output(self, pytester):
         """Two runs produce identical coverage section output."""
@@ -285,6 +301,8 @@ class TestDeterminism:
 class TestNoYAMLFilesFound:
     """T029: No YAML files found emits clear message."""
 
+    pytestmark = pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.3')
+
     def test_empty_directory_no_error(self, pytester):
         """Empty features directory produces report with 0/0."""
         pytester.mkdir('features')
@@ -303,6 +321,8 @@ class TestNoYAMLFilesFound:
 
 class TestJSONOutput:
     """T038: JSON output is valid and matches contract."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.OUTPUT_FORMATS.1')
 
     def test_json_output(self, pytester):
         features_dir = pytester.mkdir('features')
@@ -331,14 +351,21 @@ class TestJSONOutput:
             '--feature-coverage', '--feature-coverage-format=json'
         )
         result.assert_outcomes(passed=1)
-        # Find JSON in output
         import json
 
-        stdout = '\n'.join(result.stdout.lines)
-        # Extract JSON block (starts with {)
-        start = stdout.index('{')
-        end = stdout.rindex('}') + 1
-        data = json.loads(stdout[start:end])
+        # The JSON reporter emits a multi-line object. Collect lines from the
+        # first `{` until the brace depth returns to zero.
+        json_text_lines = []
+        depth = 0
+        for line in result.stdout.lines:
+            if not json_text_lines and not line.strip().startswith('{'):
+                continue
+            json_text_lines.append(line)
+            depth += line.count('{') - line.count('}')
+            if json_text_lines and depth == 0:
+                break
+        assert json_text_lines, 'No JSON block found in stdout'
+        data = json.loads('\n'.join(json_text_lines))
         assert data['overall']['covered'] == 1
         assert data['overall']['total'] == 1
         assert data['features'][0]['name'] == 'app'
@@ -346,6 +373,8 @@ class TestJSONOutput:
 
 class TestMarkdownOutput:
     """T039: Markdown output matches contract format."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.OUTPUT_FORMATS.2')
 
     def test_markdown_output(self, pytester):
         features_dir = pytester.mkdir('features')
@@ -388,6 +417,7 @@ class TestMarkdownOutput:
 class TestConfigResolution:
     """T040: INI option precedence — config defaults, CLI overrides."""
 
+    @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.1')
     def test_ini_format_default(self, pytester):
         """INI feature_coverage_format is used when CLI not provided."""
         features_dir = pytester.mkdir('features')
@@ -419,6 +449,7 @@ class TestConfigResolution:
         stdout = '\n'.join(result.stdout.lines)
         assert '"features"' in stdout
 
+    @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.1')
     def test_cli_overrides_ini(self, pytester):
         """CLI --feature-coverage-format overrides INI setting."""
         features_dir = pytester.mkdir('features')
@@ -450,6 +481,7 @@ class TestConfigResolution:
         result.assert_outcomes(passed=1)
         result.stdout.fnmatch_lines(['*Feature: app (001)*'])
 
+    @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.2')
     def test_ini_min_threshold(self, pytester):
         """INI feature_coverage_min is used when CLI not provided."""
         features_dir = pytester.mkdir('features')

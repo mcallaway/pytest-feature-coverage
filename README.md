@@ -89,7 +89,7 @@ pytest --feature-coverage --feature-coverage-min=80
 
 ```shell
 mise run test:unit          # Unit tests only
-mise run test:acceptance    # Acceptance tests only
+mise run test:integration   # Integration tests only
 mise run test:all           # All tests
 mise run test:lint          # Ruff linter
 mise run test:typecheck     # ty type checker

@@ -19,4 +19,4 @@ Every feature document should include:
 
 ## Index
 
-<!-- Add feature entries here as they are created -->
+- [001 -- Feature Coverage Plugin](001-feature-coverage-plugin.md) -- Implemented

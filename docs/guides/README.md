@@ -27,3 +27,4 @@ Each guide should include:
 
 - [001-agentic-development-workflow.md](001-agentic-development-workflow.md) -- Step-by-step workflow guide
 - [002-usage.md](002-usage.md) -- How to use pytest-feature-coverage in your project
+- [003-reviewing-tests-and-reading-reports.md](003-reviewing-tests-and-reading-reports.md) -- How to review AI-generated tests and interpret coverage reports

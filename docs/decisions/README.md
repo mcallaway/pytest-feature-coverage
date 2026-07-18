@@ -18,4 +18,6 @@ See `RUBRIC.md` in this folder for the criteria an ADR must meet.
 
 ## Index
 
-<!-- Add ADR entries here as they are created -->
+- [ADR-001: Create a Standalone pytest Plugin for Requirement Traceability](001-standalone-plugin-for-requirement-traceability.md) — why a dedicated plugin rather than template-embedded logic
+- [ADR-002: Plugin Hook Coverage Strategy](002-plugin-hook-coverage-strategy.md) — how to achieve honest coverage on a pytest plugin that is itself loaded by pytest
+- [ADR-003: What "Tested" Means in This Project](003-what-tested-means.md) — layered definition of done: execution coverage, feature coverage, structural review, and mutation testing

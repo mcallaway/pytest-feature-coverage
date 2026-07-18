@@ -14,6 +14,7 @@ FIXTURES_DIR = Path(__file__).parent.parent / 'data'
 class TestSchemaValidation:
     """T007: Unit tests for schema validation (valid YAML, missing fields, invalid types)."""
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_valid_feature_file_loads(self, reference_yaml_content: dict) -> None:
         from pytest_feature_coverage.schema import FeatureFileModel
 
@@ -22,6 +23,7 @@ class TestSchemaValidation:
         assert model.feature.id == '001'
         assert len(model.components) == 4
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_component_with_requirements(self, reference_yaml_content: dict) -> None:
         from pytest_feature_coverage.schema import FeatureFileModel
 
@@ -34,6 +36,7 @@ class TestSchemaValidation:
             3: 'Handles empty input gracefully',
         }
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_empty_requirements_component(self, reference_yaml_content: dict) -> None:
         from pytest_feature_coverage.schema import FeatureFileModel
 
@@ -41,6 +44,7 @@ class TestSchemaValidation:
         empty = model.components['EMPTY']
         assert empty.requirements == {}
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_missing_feature_key_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -49,6 +53,7 @@ class TestSchemaValidation:
         with pytest.raises(ValidationError, match='feature'):
             FeatureFileModel.model_validate({'components': {}})
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_missing_components_key_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -57,6 +62,7 @@ class TestSchemaValidation:
         with pytest.raises(ValidationError, match='components'):
             FeatureFileModel.model_validate({'feature': {'id': '1', 'name': 'x'}})
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_missing_feature_name_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -70,6 +76,7 @@ class TestSchemaValidation:
                 }
             )
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_missing_feature_id_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -83,6 +90,7 @@ class TestSchemaValidation:
                 }
             )
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_missing_component_name_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -96,6 +104,7 @@ class TestSchemaValidation:
                 }
             )
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_invalid_requirement_key_type_raises(self) -> None:
         from pydantic import ValidationError
 
@@ -118,6 +127,7 @@ class TestSchemaValidation:
 class TestYAMLLoading:
     """T008: Unit tests for YAML loading from directory (file discovery, path resolution)."""
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_load_feature_file(self, reference_yaml_path: Path) -> None:
         from pytest_feature_coverage.schema import load_feature_file
 
@@ -125,6 +135,7 @@ class TestYAMLLoading:
         assert result.feature.name == 'sample-feature'
         assert len(result.components) == 4
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_load_feature_file_not_found(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import (
             FeatureFileLoadError,
@@ -134,6 +145,19 @@ class TestYAMLLoading:
         with pytest.raises(FeatureFileLoadError, match='not found'):
             load_feature_file(tmp_path / 'nonexistent.feature.yaml')
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
+    def test_load_feature_file_empty_yaml(self, tmp_path: Path) -> None:
+        from pytest_feature_coverage.schema import (
+            FeatureFileLoadError,
+            load_feature_file,
+        )
+
+        empty_file = tmp_path / 'empty.feature.yaml'
+        empty_file.write_text('')
+        with pytest.raises(FeatureFileLoadError, match='Empty feature file'):
+            load_feature_file(empty_file)
+
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_load_feature_file_invalid_yaml(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import (
             FeatureFileLoadError,
@@ -145,6 +169,7 @@ class TestYAMLLoading:
         with pytest.raises(FeatureFileLoadError):
             load_feature_file(bad_file)
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.2')
     def test_load_feature_file_validation_error(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import (
             FeatureFileLoadError,
@@ -156,6 +181,7 @@ class TestYAMLLoading:
         with pytest.raises(FeatureFileLoadError, match='bad.feature.yaml'):
             load_feature_file(bad_file)
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_load_all_features_discovers_files(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import load_all_features
 
@@ -172,6 +198,7 @@ class TestYAMLLoading:
         names = {r.feature.name for r in results}
         assert names == {'feature-a', 'feature-b'}
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_load_all_features_ignores_non_feature_yaml(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import load_all_features
 
@@ -187,6 +214,7 @@ class TestYAMLLoading:
         assert len(results) == 1
         assert results[0].feature.name == 'only-feature'
 
+    @pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.1')
     def test_load_all_features_multiple_directories(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import load_all_features
 
@@ -208,6 +236,8 @@ class TestYAMLLoading:
 
 class TestDuplicateDetection:
     """T012: Duplicate feature name detection."""
+
+    pytestmark = pytest.mark.req('feature-coverage-plugin.YAML_SCHEMA.3')
 
     def test_duplicate_feature_names_raises(self, tmp_path: Path) -> None:
         from pytest_feature_coverage.schema import (

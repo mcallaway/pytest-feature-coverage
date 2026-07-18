@@ -22,6 +22,9 @@ venv/
 htmlcov/
 .hypothesis/
 
+# copilot otel cache
+.cache/
+
 # IDE
 .vscode/
 .idea/

@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import pytest
+
+pytestmark = pytest.mark.integration
+
 
 class TestCIThreshold:
     """T030: Acceptance tests for threshold behavior."""
 
+    @pytest.mark.req('feature-coverage-plugin.CI_THRESHOLD.1')
     def test_below_threshold_fails(self, pytester):
         """Exit non-zero when coverage is below minimum."""
         features_dir = pytester.mkdir('features')
@@ -35,6 +40,7 @@ class TestCIThreshold:
         assert result.ret != 0
         result.stdout.fnmatch_lines(['*below minimum*'])
 
+    @pytest.mark.req('feature-coverage-plugin.CI_THRESHOLD.2')
     def test_above_threshold_passes(self, pytester):
         """Exit zero when coverage meets minimum."""
         features_dir = pytester.mkdir('features')
@@ -63,6 +69,7 @@ class TestCIThreshold:
         result.assert_outcomes(passed=1)
         assert result.ret == 0
 
+    @pytest.mark.req('feature-coverage-plugin.CI_THRESHOLD.3')
     def test_zero_threshold_default(self, pytester):
         """Default threshold of 0 never fails."""
         features_dir = pytester.mkdir('features')

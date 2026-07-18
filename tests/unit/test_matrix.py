@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import pytest
+
 
 class TestCoverageMatrix:
     """T022: Unit tests for matrix computation."""
 
+    @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.1')
     def test_covered_requirement(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
         from pytest_feature_coverage.schema import (
@@ -25,6 +28,7 @@ class TestCoverageMatrix:
         assert report.covered_requirements == 1
         assert report.coverage_percentage == 100.0
 
+    @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.1')
     def test_uncovered_requirement(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
         from pytest_feature_coverage.schema import (
@@ -48,6 +52,7 @@ class TestCoverageMatrix:
         assert report.covered_requirements == 1
         assert report.coverage_percentage == 50.0
 
+    @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.1')
     def test_zero_req_component_excluded(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
         from pytest_feature_coverage.schema import (
@@ -70,6 +75,10 @@ class TestCoverageMatrix:
         assert report.total_requirements == 1
         assert report.coverage_percentage == 100.0
 
+    @pytest.mark.req(
+        'feature-coverage-plugin.REQ_MARKER.2',
+        'feature-coverage-plugin.COVERAGE_REPORT.1',
+    )
     def test_many_to_many(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
         from pytest_feature_coverage.schema import (
@@ -98,6 +107,7 @@ class TestCoverageMatrix:
             'test.py::t2',
         ]
 
+    @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.3')
     def test_empty_features(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
 
@@ -105,6 +115,7 @@ class TestCoverageMatrix:
         assert report.total_requirements == 0
         assert report.coverage_percentage == 0.0
 
+    @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.2')
     def test_deterministic_ordering(self) -> None:
         from pytest_feature_coverage.matrix import compute_coverage
         from pytest_feature_coverage.schema import (

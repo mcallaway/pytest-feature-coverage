@@ -1,0 +1,50 @@
+# Machine-readable requirements for the feature-coverage-plugin itself.
+# This file is the source of truth for what the plugin promises.
+# See docs/features/001-feature-coverage-plugin.md for human-readable context.
+
+feature:
+  id: "001"
+  name: feature-coverage-plugin
+
+components:
+  YAML_SCHEMA:
+    name: Feature YAML loading and validation
+    requirements:
+      1: Valid .feature.yaml files load and register requirements without error
+      2: YAML files with missing or invalid fields fail collection with a clear error naming the file
+      3: Duplicate feature names across YAML files fail collection with a clear error
+
+  REQ_MARKER:
+    name: req() test annotation marker
+    requirements:
+      1: Tests annotated with req() are associated with the specified requirement
+      2: A single test may annotate multiple requirement IDs
+      3: Orphan req() markers referencing unknown IDs emit a warning by default
+      4: Orphan req() markers emit a collection error when feature_coverage_strict is true
+
+  COVERAGE_REPORT:
+    name: Coverage report generation
+    requirements:
+      1: --feature-coverage produces a text report grouped by feature and component
+      2: Report output is deterministic for identical inputs
+      3: When no feature YAML files exist the report shows Overall 0/0 without error
+
+  CI_THRESHOLD:
+    name: CI coverage threshold enforcement
+    requirements:
+      1: Process exits non-zero when coverage falls below --feature-coverage-min
+      2: Process exits zero when coverage meets or exceeds the threshold
+      3: Default threshold of 0 always passes
+
+  OUTPUT_FORMATS:
+    name: Machine-readable output formats
+    requirements:
+      1: --feature-coverage-format=json produces valid structured JSON to stdout
+      2: --feature-coverage-format=markdown produces a deterministic markdown table
+
+  CONFIGURATION:
+    name: pyproject.toml configuration
+    requirements:
+      1: feature_yaml_paths INI option sets the default YAML search paths
+      2: feature_coverage_min INI option sets the default coverage threshold
+      3: feature_yaml_paths is required when --feature-coverage is active; omitting it emits a clear error

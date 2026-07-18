@@ -11,7 +11,7 @@ _PLUGIN_ACTIVE_ATTR = '_feature_coverage_active'
 _PLUGIN_STATE_ATTR = '_feature_coverage_state'
 
 
-def pytest_addoption(parser: pytest.Parser) -> None:
+def pytest_addoption(parser: pytest.Parser) -> None:  # pragma: no cover
     """Register CLI options and INI settings for feature coverage."""
     group = parser.getgroup('feature-coverage', 'Feature coverage reporting')
     group.addoption(
@@ -56,7 +56,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     )
 
 
-def pytest_configure(config: pytest.Config) -> None:
+def pytest_configure(config: pytest.Config) -> None:  # pragma: no cover
     """Register the req marker and determine if the plugin is active."""
     config.addinivalue_line(
         'markers',
@@ -127,7 +127,7 @@ def _get_known_requirement_ids(config: pytest.Config) -> set[str]:
     return ids
 
 
-def pytest_collection_modifyitems(
+def pytest_collection_modifyitems(  # pragma: no cover
     config: pytest.Config, items: list[pytest.Item]
 ) -> None:
     """Scan collected items for req() markers."""
@@ -180,7 +180,7 @@ def _compute_and_store_report(config: pytest.Config) -> None:
     state['report'] = report
 
 
-def pytest_sessionfinish(session: pytest.Session) -> None:
+def pytest_sessionfinish(session: pytest.Session) -> None:  # pragma: no cover
     """Set exit code if coverage is below threshold."""
     if not _is_active(session.config):
         return
@@ -197,7 +197,7 @@ def pytest_sessionfinish(session: pytest.Session) -> None:
         session.exitstatus = 2
 
 
-def pytest_terminal_summary(
+def pytest_terminal_summary(  # pragma: no cover
     terminalreporter: pytest.TerminalReporter,
     exitstatus: int,
     config: pytest.Config,
