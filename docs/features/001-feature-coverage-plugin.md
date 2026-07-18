@@ -34,6 +34,10 @@ As a developer or CI pipeline, I want to generate coverage reports in JSON or Ma
 
 As a developer, I want to set default YAML paths, output format, and minimum threshold in `pyproject.toml`, so that I do not have to pass the same CLI flags on every invocation.
 
+### US-7 -- Filter Coverage Report by Feature Name
+
+As a developer working on a specific feature in a project with many `.feature.yaml` files, I want to pass `--feature-coverage-filter <substr>` to narrow the coverage report to matching features, so that I can see focused, actionable coverage data without noise from unrelated features.
+
 ## Acceptance Criteria
 
 Requirements are tracked in `features/001-feature-coverage-plugin.feature.yaml`. The criteria below map directly to those requirement IDs.
@@ -73,6 +77,18 @@ Requirements are tracked in `features/001-feature-coverage-plugin.feature.yaml`.
 - `CONFIGURATION.1`: `feature_yaml_paths` set in `pyproject.toml` is used when the CLI flag is absent.
 - `CONFIGURATION.2`: `feature_coverage_min` set in `pyproject.toml` enforces a threshold when the CLI flag is absent.
 - `CONFIGURATION.3`: Activating `--feature-coverage` without `feature_yaml_paths` configured emits a clear error.
+
+### COVERAGE_FILTER -- Coverage report filtering by feature name
+
+- `COVERAGE_FILTER.1`: `--feature-coverage-filter TEXT` shows only features whose name contains `TEXT` (case-insensitive) in the report; non-matching features are omitted.
+- `COVERAGE_FILTER.2`: When a filter is active, "Overall" totals and coverage percentages count only the filtered features' requirements.
+- `COVERAGE_FILTER.3`: `--feature-coverage-min` threshold is evaluated against the filtered Overall percentage, not the full feature set's percentage.
+- `COVERAGE_FILTER.4`: Multiple `--feature-coverage-filter` flags combine as OR: a feature is shown if its name matches any of the provided substrings.
+- `COVERAGE_FILTER.5`: When no `--feature-coverage-filter` flags are passed, behaviour is identical to the current baseline (all features shown, no regressions).
+- `COVERAGE_FILTER.6`: Orphan `req()` marker detection is unaffected by the filter; orphans are checked against the full set of loaded features, not just the filtered subset.
+- `COVERAGE_FILTER.7`: The `--feature-coverage-filter` option appears in `pytest --help` output with a clear, user-facing description.
+- `COVERAGE_FILTER.8`: All three output format reporters (text, JSON, markdown) respect the filter and produce output scoped to the filtered feature set.
+- `COVERAGE_FILTER.9`: Filtering to 0 matching features produces an empty report with `Overall: 0/0 requirements covered (0.0%)` and does not raise an error.
 
 ## Dependencies
 

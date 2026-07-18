@@ -48,3 +48,16 @@ components:
       1: feature_yaml_paths INI option sets the default YAML search paths
       2: feature_coverage_min INI option sets the default coverage threshold
       3: feature_yaml_paths is required when --feature-coverage is active; omitting it emits a clear error
+
+  COVERAGE_FILTER:
+    name: Coverage report filtering by feature name
+    requirements:
+      1: "--feature-coverage-filter TEXT narrows the report to features whose name contains TEXT (case-insensitive); features not matching are omitted"
+      2: When one or more filters are active the Overall totals and coverage percentage count only the filtered features' requirements
+      3: "--feature-coverage-min threshold is evaluated against the filtered Overall percentage, not the full feature set's percentage"
+      4: "Multiple --feature-coverage-filter flags combine as OR: a feature is shown if its name matches any of the provided substrings"
+      5: "When no --feature-coverage-filter flags are passed, behaviour is identical to the unfiltered baseline (all features shown, no regressions)"
+      6: Orphan req() marker detection is unaffected by the filter; orphans are checked against the full set of loaded features, not just the filtered subset
+      7: "The --feature-coverage-filter option appears in pytest --help output with a clear, user-facing description"
+      8: All three output format reporters (text, JSON, markdown) respect the filter and produce output scoped to the filtered feature set
+      9: "Filtering to 0 matching features produces an empty report with Overall: 0/0 requirements covered (0.0%) and does not raise an error"

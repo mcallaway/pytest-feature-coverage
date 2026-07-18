@@ -32,6 +32,14 @@ def pytest_addoption(parser: pytest.Parser) -> None:  # pragma: no cover
         default=None,
         help='Minimum coverage percentage; exit non-zero if below (default: 0)',
     )
+    group.addoption(
+        '--feature-coverage-filter',
+        action='append',
+        default=None,
+        metavar='TEXT',
+        help='Only show features whose name contains TEXT (case-insensitive). '
+        'Repeatable; multiple values combine as OR. Default: show all features.',
+    )
 
     parser.addini(
         'feature_yaml_paths',
@@ -171,7 +179,19 @@ def _compute_and_store_report(config: pytest.Config) -> None:
     if 'report' in state:
         return
 
-    features = state['features']
+    features = state[
+        'features'
+    ]  # full list; never mutated (needed for orphan checking)
+
+    filters = config.getoption('--feature-coverage-filter') or []
+    if filters:
+        lower_filters = [f.lower() for f in filters]
+        features = [
+            ff
+            for ff in features
+            if any(f in ff.feature.name.lower() for f in lower_filters)
+        ]
+
     req_map = state.get('req_map', {})
     orphans = state.get('orphans', [])
 

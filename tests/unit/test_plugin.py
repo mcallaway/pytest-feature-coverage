@@ -130,6 +130,7 @@ class TestComputeAndStoreReport:
             'orphans': ['some.orphan.1'],
         }
         config = types.SimpleNamespace()
+        config.getoption = lambda *_a, **_kw: None
         setattr(config, _PLUGIN_STATE_ATTR, state)
         _compute_and_store_report(config)
         assert state['report'].covered_requirements == 1
