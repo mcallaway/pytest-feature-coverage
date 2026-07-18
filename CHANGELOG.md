@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.2...0.1.3) (2026-07-18)
+
+
+### Features
+
+* add --feature-coverage-filter option ([#17](https://github.com/bayer-int/pytest-feature-coverage/issues/17)) ([77f1920](https://github.com/bayer-int/pytest-feature-coverage/commit/77f1920ed20b490636688a595ca8a56391e83c2a))
+
 ## [0.1.2](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.1...0.1.2) (2026-07-18)
 
 
