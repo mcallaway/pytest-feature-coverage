@@ -11,6 +11,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Support floor and development runtime (see ADR-005).
+        python-version: ["3.11", "3.14"]
 
     steps:
       - name: Check out code
@@ -19,7 +24,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
-          python-version: "3.14"
+          python-version: ${{ matrix.python-version }}
           allow-prereleases: true
 
       - name: Install uv

@@ -18,4 +18,3 @@ python.uv_venv_auto = true
 _.python.venv = { path = ".venv", create = true }
 
 # This writes copilot session data to ./.cache which can aid in cost reporting.
-COPILOT_OTEL_FILE_EXPORTER_PATH = "{{ config_root }}/.cache/copilot-otel/copilot-otel-{{ now() | date(format='%Y%m%d-%H%M%S') }}-{{ mise_pid }}.jsonl"

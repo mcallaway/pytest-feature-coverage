@@ -6,7 +6,7 @@ This guide is for developers who want to track which requirements are covered by
 
 ## Prerequisites
 
-- Python >= 3.14
+- Python >= 3.11
 - pytest >= 9.0
 - `pytest-feature-coverage` installed (e.g., via `pip install -e .` or as a dependency)
 

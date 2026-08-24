@@ -22,3 +22,4 @@ See `RUBRIC.md` in this folder for the criteria an ADR must meet.
 - [ADR-002: Plugin Hook Coverage Strategy](002-plugin-hook-coverage-strategy.md) — how to achieve honest coverage on a pytest plugin that is itself loaded by pytest
 - [ADR-003: What "Tested" Means in This Project](003-what-tested-means.md) — layered definition of done: execution coverage, feature coverage, structural review, and mutation testing
 - [ADR-004: Apply the `--feature-coverage-filter` at Report Time, Not Load Time](004-apply-coverage-filter-at-report-time.md) — why the filter is applied in `_compute_and_store_report()` rather than at load time, and why no INI option was added
+- [ADR-005: Support Python >=3.11 While Developing on 3.14](005-support-python-311-develop-on-314.md) — declare a 3.11 install floor; keep local/publish on 3.14; type-check and CI against the floor

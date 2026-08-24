@@ -8,4 +8,6 @@ set -o pipefail
 set -o nounset
 set -o errexit
 
-uv run pytest -sv --log-cli-level=DEBUG tests/integration/
+# Default capture keeps nested pytester session output off the console
+# (those runs intentionally print FAILED coverage lines). Pass -s to debug.
+uv run pytest -v tests/integration/
