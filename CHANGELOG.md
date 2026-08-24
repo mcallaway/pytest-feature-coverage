@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.3...0.1.4) (2026-08-24)
+
+
+### Bug Fixes
+
+* support Python &gt;=3.11 while developing on 3.14 ([#23](https://github.com/bayer-int/pytest-feature-coverage/issues/23)) ([de944f2](https://github.com/bayer-int/pytest-feature-coverage/commit/de944f2cedc3e65c8290b9c78c5719fc2712572f))
+
 ## [0.1.3](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.2...0.1.3) (2026-07-18)
 
 
