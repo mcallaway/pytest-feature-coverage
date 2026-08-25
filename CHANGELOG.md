@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.5...0.1.6) (2026-08-25)
+
+
+### Bug Fixes
+
+* match working publish command from workstation-setup ([967cae0](https://github.com/bayer-int/pytest-feature-coverage/commit/967cae037bc18fd2fd099f6da25c555cc672532b))
+
 ## [0.1.5](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.4...0.1.5) (2026-08-25)
 
 
