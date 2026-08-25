@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.4...0.1.5) (2026-08-25)
+
+
+### Bug Fixes
+
+* trigger Artifactory publish from Release Please releases ([57297db](https://github.com/bayer-int/pytest-feature-coverage/commit/57297dbcb9fe2f0137d9a6c16e1f6dea2d0944d2))
+
 ## [0.1.4](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.3...0.1.4) (2026-08-24)
 
 
