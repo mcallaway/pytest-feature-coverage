@@ -35,12 +35,7 @@ jobs:
         run: uv build
 
       - name: Publish to Artifactory
-        # Existing artifacts are skipped so a failed or partial release can be
-        # safely retried; package indexes do not support replacing files.
-        run: >-
-          uv publish
-          --index shared-python-prod-shared
-          --check-url https://artifactory.bayer.com/artifactory/api/pypi/shared-python-prod-shared/simple
+        run: uv publish --index shared-python-prod-shared
         env:
           UV_PUBLISH_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           UV_PUBLISH_PASSWORD: ${{ secrets.ARTIFACTORY_SECRET }}

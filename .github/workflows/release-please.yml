@@ -17,6 +17,6 @@ jobs:
         with:
           # A PAT is required so releases created by this workflow can trigger
           # the separate release.published workflow.
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
