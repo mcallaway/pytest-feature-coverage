@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.6...0.1.7) (2026-09-29)
+
+
+### Features
+
+* execution-aware feature coverage (covered = genuinely passed, not just collected) ([#29](https://github.com/bayer-int/pytest-feature-coverage/issues/29)) ([c532a71](https://github.com/bayer-int/pytest-feature-coverage/commit/c532a71bbf8e69c1e97658f287859494811b0833))
+
 ## [0.1.6](https://github.com/bayer-int/pytest-feature-coverage/compare/0.1.5...0.1.6) (2026-08-25)
 
 

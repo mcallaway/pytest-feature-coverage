@@ -1,6 +1,6 @@
 [project]
 name = "pytest-feature-coverage"
-version = "0.1.6"
+version = "0.1.7"
 description = "A pytest plugin that connects tests to requirements defined in YAML feature files and produces deterministic coverage reports"
 authors = [{name = "Matt Callaway", email = "matt.callaway@bayer.com"}]
 requires-python = ">=3.11"
