@@ -88,6 +88,7 @@ class TestMissingConfig:
         result.stderr.fnmatch_lines(['*feature_yaml_paths*'])
 
     @pytest.mark.req('feature-coverage-plugin.CONFIGURATION.1')
+    @pytest.mark.req('feature-coverage-plugin.EXECUTION_COVERAGE.13')
     def test_plugin_inactive_without_flag(self, pytester):
         """Plugin is inert when --feature-coverage is not passed."""
         pytester.makepyfile("""

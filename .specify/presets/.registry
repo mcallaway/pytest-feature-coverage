@@ -2,14 +2,14 @@
   "schema_version": "1.0",
   "presets": {
     "agentic": {
-      "version": "0.1.0",
+      "version": "0.4.2",
       "source": "local",
-      "manifest_hash": "sha256:62dd514bc3e4b1a9e42670fc3ecf6b26cc5cc4025888b590738b47b331f9494a",
+      "manifest_hash": "sha256:7b79473526291cfd7d3446d668aa8300e8899a830bdb2b669e7a9011ff95da98",
       "enabled": true,
       "priority": 10,
       "registered_commands": {},
-      "registered_skills": [],
-      "installed_at": "2026-05-19T19:05:23.480903+00:00"
+      "registered_skills": {},
+      "installed_at": "2026-09-29T16:28:57.170761+00:00"
     }
   }
 }

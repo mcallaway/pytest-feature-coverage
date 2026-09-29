@@ -9,7 +9,7 @@ See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `a
 
 ## Current Focus
 
-<!-- No active plan -->
+<!-- No active plan-level work at the moment. -->
 
 ## Next Steps
 
@@ -17,5 +17,6 @@ See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `a
 
 ## Completed
 
+- **002-execution-aware-coverage**: Make `--feature-coverage` execution-aware -- a requirement is covered only when at least one associated test passes, not merely collected. [Plan](002-execution-aware-coverage.md) | [Spec](../../specs/002-execution-aware-coverage/spec.md) -- Closed 2026-09-29 (PR [#29](https://github.com/bayer-int/pytest-feature-coverage/pull/29))
 - **w29-coverage-filter**: `--feature-coverage-filter` CLI option — narrows coverage report to features matching a substring. [Plan](.../../.specify/specs/w29-coverage-filter/plan.md) | [Spec](../../.specify/specs/w29-coverage-filter/spec.md) — Closed 2026-07-18
 - **001-feature-coverage-plugin**: pytest plugin for requirement-to-test coverage tracking. [Plan](../../specs/001-feature-coverage-plugin/plan.md) | [Spec](../../specs/001-feature-coverage-plugin/spec.md) — Closed 2025-05-20

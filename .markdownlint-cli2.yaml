@@ -3,6 +3,7 @@ globs:
 
 ignores:
   - ".claude/**"
+  - ".cursor/**"
   - ".github/**"
   - ".venv/**"
   - "tmp/**"

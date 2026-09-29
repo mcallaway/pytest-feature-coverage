@@ -31,7 +31,7 @@ Examine the project structure:
 From available documentation:
 
 1. Read `docs/features/` for defined features
-1. Read `.specify/specs/` for Spec Kit feature specs
+1. Read Spec Kit feature specs (each feature's specs directory, resolved dynamically -- `specs/NNN/` by default, `.specify/specs/NNN/` for legacy-path features)
 1. Read `docs/design/` for documented concepts
 1. Examine source code for module boundaries and key abstractions
 

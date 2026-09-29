@@ -38,6 +38,10 @@ As a developer, I want to set default YAML paths, output format, and minimum thr
 
 As a developer working on a specific feature in a project with many `.feature.yaml` files, I want to pass `--feature-coverage-filter <substr>` to narrow the coverage report to matching features, so that I can see focused, actionable coverage data without noise from unrelated features.
 
+### US-8 -- Coverage Reflects Verified Requirements, Not Declared Ones
+
+As a developer relying on `pytest --feature-coverage` as a CI gate, I want a requirement to count as covered only when a test that references it actually passed (not merely collected), so that a green feature-coverage report is honest evidence the requirement was verified. See [`specs/002-execution-aware-coverage/spec.md`](../../specs/002-execution-aware-coverage/spec.md) and [ADR-006](../decisions/006-execution-aware-covering-test.md).
+
 ## Acceptance Criteria
 
 Requirements are tracked in `features/001-feature-coverage-plugin.feature.yaml`. The criteria below map directly to those requirement IDs.
@@ -89,6 +93,22 @@ Requirements are tracked in `features/001-feature-coverage-plugin.feature.yaml`.
 - `COVERAGE_FILTER.7`: The `--feature-coverage-filter` option appears in `pytest --help` output with a clear, user-facing description.
 - `COVERAGE_FILTER.8`: All three output format reporters (text, JSON, markdown) respect the filter and produce output scoped to the filtered feature set.
 - `COVERAGE_FILTER.9`: Filtering to 0 matching features produces an empty report with `Overall: 0/0 requirements covered (0.0%)` and does not raise an error.
+
+### EXECUTION_COVERAGE -- Execution-aware coverage (a requirement is covered only by a genuine pass)
+
+- `EXECUTION_COVERAGE.1`: A node ID with a clean setup/call/teardown pass is tracked as achieving a clean pass.
+- `EXECUTION_COVERAGE.2`: A node ID whose call phase fails is not tracked as a clean pass.
+- `EXECUTION_COVERAGE.3`: A node ID whose call phase is a plain skip is not tracked as a clean pass.
+- `EXECUTION_COVERAGE.4`: A node ID whose call phase is an expected `xfail` is not tracked as a clean pass.
+- `EXECUTION_COVERAGE.5`: A node ID whose call phase is an unexpected `xpass` is not tracked as a clean pass (deliberate policy; see ADR-006).
+- `EXECUTION_COVERAGE.6`: A node ID whose setup phase errors is not tracked as a clean pass.
+- `EXECUTION_COVERAGE.7`: A node ID whose teardown phase errors is not tracked as a clean pass, even after a passing call phase.
+- `EXECUTION_COVERAGE.8`: Node IDs are tracked independently of one another.
+- `EXECUTION_COVERAGE.9`: A requirement is covered if and only if at least one of its associated node IDs achieved a clean pass; only clean-pass node IDs appear as covering evidence.
+- `EXECUTION_COVERAGE.10`: When multiple node IDs (including parametrized cases) reference the same requirement, one clean pass is enough to cover it, and only the passing node ID(s) are listed as evidence.
+- `EXECUTION_COVERAGE.11`: `--feature-coverage-min` is evaluated against execution-aware coverage and never hides pytest's own failing exit status.
+- `EXECUTION_COVERAGE.12`: Text, JSON, and Markdown reports agree on total requirement count, covered count, percentage, and covering node IDs for the same run.
+- `EXECUTION_COVERAGE.13`: The plugin remains inert (no outcome-tracking overhead) unless `--feature-coverage` is active.
 
 ## Dependencies
 

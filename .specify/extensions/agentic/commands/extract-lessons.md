@@ -46,10 +46,10 @@ Look for these categories:
 
 ### Step 3: Skip noise
 
-Do NOT report:
+Report only findings that could benefit future developers. Skip:
 
 - Routine bug fixes with obvious causes
-- Generated code changes (lockfiles, auto-formatting)
+- Generated code changes (lockfiles, auto-formatting, changelogs)
 - Merge commits
 - Version bumps
 

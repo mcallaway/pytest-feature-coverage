@@ -24,8 +24,8 @@ If `$ARGUMENTS` specifies a rubric file, use it. Otherwise, auto-detect:
 - Files in `docs/plans/` → use `docs/plans/RUBRIC.md`
 - Files in `docs/decisions/` → use `docs/decisions/RUBRIC.md`
 - Files in `docs/design/` → use `docs/design/RUBRIC.md`
-- Files in `.specify/specs/*/plan.md` → use `docs/plans/RUBRIC.md`
-- Files in `.specify/specs/*/spec.md` → use `docs/features/RUBRIC.md`
+- Files in a feature's specs directory named `plan.md` (`specs/*/plan.md` by default, or `.specify/specs/*/plan.md` for legacy-path features) → use `docs/plans/RUBRIC.md`
+- Files in a feature's specs directory named `spec.md` (`specs/*/spec.md` by default, or `.specify/specs/*/spec.md` for legacy-path features) → use `docs/features/RUBRIC.md`
 - Files in `tests/` → use `tests/RUBRIC.md` (if it exists)
 
 If no rubric can be identified, report the error and list available rubrics.

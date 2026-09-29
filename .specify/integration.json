@@ -1,13 +1,27 @@
 {
-  "version": "0.8.8",
+  "version": "1.0.8",
   "integration_state_schema": 1,
   "installed_integrations": [
-    "copilot"
+    "copilot",
+    "claude",
+    "cursor-agent"
   ],
   "integration_settings": {
     "copilot": {
       "script": "sh",
-      "invoke_separator": "."
+      "raw_options": "--skills",
+      "parsed_options": {
+        "skills": true
+      },
+      "invoke_separator": "-"
+    },
+    "claude": {
+      "script": "sh",
+      "invoke_separator": "-"
+    },
+    "cursor-agent": {
+      "script": "sh",
+      "invoke_separator": "-"
     }
   },
   "integration": "copilot",

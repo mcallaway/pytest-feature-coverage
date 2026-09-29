@@ -3,15 +3,17 @@ schema_version: "1.0"
 extension:
   id: "agentic"
   name: "Agentic Development Workflow"
-  version: "0.1.0"
+  version: "0.4.2" # x-release-please-version
   description: "TTL-aware project memory, rubric-driven quality, and lifecycle commands for durable shared understanding"
   author: "bayer-int"
+  category: "process"
+  effect: "read-write"
   repository: "https://github.com/bayer-int/speckit-agentic-workflow"
   license: "MIT"
   homepage: "https://github.com/bayer-int/speckit-agentic-workflow"
 
 requires:
-  speckit_version: ">=0.8.0"
+  speckit_version: ">=0.16.0"
   tools:
     - name: "git"
       required: false
@@ -68,6 +70,19 @@ provides:
     - name: "speckit.agentic.onboard"
       file: "commands/onboard.md"
       description: "Interactive project onboarding — walk a new engineer through the codebase"
+
+    - name: "speckit.agentic.guided-pr-review"
+      file: "commands/guided-pr-review.md"
+      description: "Step-by-step PR walkthrough for a generalist reviewer, with inline concept explanations"
+
+    - name: "speckit.agentic.full-workflow"
+      file: "commands/full-workflow.md"
+      description: "Take a bug report or feature request through to an open, reviewable pull request"
+
+    # --- Merge (human-invoked terminal action) ---
+    - name: "speckit.agentic.merge-pr"
+      file: "commands/merge-pr.md"
+      description: "Merge the pull request and sync local state — human-invoked terminal action after review-pr passes"
 
 hooks:
   after_plan:

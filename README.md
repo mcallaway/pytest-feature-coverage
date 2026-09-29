@@ -85,6 +85,24 @@ pytest --feature-coverage --feature-coverage-format=json
 pytest --feature-coverage --feature-coverage-min=80
 ```
 
+### Execution-Aware Coverage
+
+A requirement is covered only when at least one of its associated tests achieves a **clean pass**, not merely when a `req()` marker was collected. Coverage is computed at the end of the run from real pytest outcomes:
+
+| Outcome                                     | Counts as coverage? |
+| ------------------------------------------- | ------------------- |
+| Passed                                      | Yes                 |
+| Failed (assertion, exception, etc.)         | No                  |
+| Skipped                                     | No                  |
+| `xfail` (expected failure)                  | No                  |
+| `xpass` (unexpected pass, non-strict xfail) | No (see note below) |
+| Setup or teardown error                     | No                  |
+| Deselected / never run                      | No                  |
+
+When several tests reference the same requirement, one clean pass is enough: the requirement is covered and the report lists only the passing node ID(s) as evidence, even if other tests for the same requirement fail, skip, or xfail. Parametrized test cases are tracked independently by their own node ID.
+
+**Why `xpass` doesn't count**: an `xfail` marker is a declared expectation that the test will fail. A test unexpectedly passing signals the marker is stale or the underlying behavior changed, not that the requirement was genuinely verified as intended. This is a deliberate policy decision, documented in [ADR-006](docs/decisions/006-execution-aware-covering-test.md).
+
 ### Running Tests
 
 ```shell

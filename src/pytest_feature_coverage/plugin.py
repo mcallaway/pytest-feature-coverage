@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generator
+
+import pytest
 
 if TYPE_CHECKING:
-    import pytest
+    from .outcomes import OutcomeTracker
 
 _PLUGIN_ACTIVE_ATTR = '_feature_coverage_active'
 _PLUGIN_STATE_ATTR = '_feature_coverage_state'
@@ -106,7 +108,13 @@ def pytest_configure(config: pytest.Config) -> None:  # pragma: no cover
 
         raise _pytest.config.UsageError(str(e)) from e
 
-    setattr(config, _PLUGIN_STATE_ATTR, {'features': features})
+    from .outcomes import OutcomeTracker
+
+    setattr(
+        config,
+        _PLUGIN_STATE_ATTR,
+        {'features': features, 'outcomes': OutcomeTracker()},
+    )
 
 
 def _is_active(config: pytest.Config) -> bool:
@@ -171,6 +179,40 @@ def pytest_collection_modifyitems(  # pragma: no cover
             )
 
 
+@pytest.hookimpl(wrapper=True, tryfirst=True)
+def pytest_runtest_makereport(  # pragma: no cover
+    item: pytest.Item, call: pytest.CallInfo[None]
+) -> Generator[None, pytest.TestReport, pytest.TestReport]:
+    """Record each finalized phase report's outcome for execution-aware coverage.
+
+    Registered with tryfirst=True so this wrapper is outermost: its `yield`
+    resumes only after other wrapper hooks (notably `_pytest.skipping`'s,
+    which finalizes `report.outcome`/`report.wasxfail` for xfail/xpass) have
+    already run, guaranteeing the report seen here reflects the final verdict.
+    """
+    report = yield
+
+    config = item.config
+    if _is_active(config):
+        state = getattr(config, _PLUGIN_STATE_ATTR, None)
+        if state is not None:
+            tracker: OutcomeTracker = state['outcomes']
+            wasxfail = getattr(report, 'wasxfail', None)
+            tracker.record(report.nodeid, report.when, report.outcome, wasxfail)
+
+    return report
+
+
+def _apply_outcome_filter(
+    req_map: dict[str, list[str]], passing_nodeids: set[str]
+) -> dict[str, list[str]]:
+    """Narrow each requirement's covering-test list to only passing node IDs."""
+    return {
+        req_id: [nodeid for nodeid in nodeids if nodeid in passing_nodeids]
+        for req_id, nodeids in req_map.items()
+    }
+
+
 def _compute_and_store_report(config: pytest.Config) -> None:
     """Compute coverage report and store on config state."""
     from .matrix import compute_coverage
@@ -195,6 +237,9 @@ def _compute_and_store_report(config: pytest.Config) -> None:
     req_map = state.get('req_map', {})
     orphans = state.get('orphans', [])
 
+    tracker: OutcomeTracker = state['outcomes']
+    req_map = _apply_outcome_filter(req_map, tracker.passing_nodeids())
+
     report = compute_coverage(features, req_map)
     report.orphan_markers = orphans
     state['report'] = report
@@ -214,7 +259,13 @@ def pytest_sessionfinish(session: pytest.Session) -> None:  # pragma: no cover
 
     if threshold > 0 and report.coverage_percentage < threshold:
         state['_threshold_failed'] = True
-        session.exitstatus = 2
+        # Only escalate the exit status ourselves when pytest's own result
+        # was otherwise a clean 0 (all collected tests passed). If pytest
+        # already recorded a failure (e.g. TESTS_FAILED), leave it as-is --
+        # FR-009 requires that pytest's own failure exit status is never
+        # hidden or overwritten by the coverage threshold check.
+        if session.exitstatus == 0:
+            session.exitstatus = pytest.ExitCode.TESTS_FAILED
 
 
 def pytest_terminal_summary(  # pragma: no cover

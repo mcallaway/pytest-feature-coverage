@@ -3,14 +3,13 @@ schema_version: "1.0"
 preset:
   id: "agentic"
   name: "Agentic Workflow"
-  version: "0.1.0"
+  version: "0.4.2" # x-release-please-version
   description: "Enriches Spec Kit core templates with TTL-aware project memory, rubric references, and decision capture prompts"
-  author: "agentic-workflow"
-  repository: "https://github.com/github/spec-kit"
+  repository: "https://github.com/bayer-int/speckit-agentic-workflow"
   license: "MIT"
 
 requires:
-  speckit_version: ">=0.6.0"
+  speckit_version: ">=0.16.0"
 
 provides:
   templates:

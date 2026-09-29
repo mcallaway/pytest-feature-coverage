@@ -1,6 +1,6 @@
 # Codebase Map
 
-Last updated: 2026-07-18
+Last updated: 2026-09-29
 
 ## Directory Overview
 
@@ -11,6 +11,7 @@ pytest-feature-coverage/
 │   ├── schema.py                  # Pydantic models, YAML loading, validation
 │   ├── scanner.py                 # req() marker collection, orphan detection
 │   ├── matrix.py                  # Coverage computation (CoverageEntry, CoverageReport)
+│   ├── outcomes.py                # Execution-aware pass/fail tracking (OutcomeTracker)
 │   └── reporters/                 # Output formatters
 │       ├── text.py                # Default human-readable report
 │       ├── json.py                # Machine-readable JSON output
@@ -48,20 +49,22 @@ pytest-feature-coverage/
 | `pytest_feature_coverage.schema`             | Pydantic models (`FeatureFileModel`, `ComponentModel`, `FeatureModel`), `load_feature_file()`, `load_all_features()`, duplicate detection | `schema.py`             |
 | `pytest_feature_coverage.scanner`            | `scan_requirements()` from `req()` markers, `find_orphans()`                                                                              | `scanner.py`            |
 | `pytest_feature_coverage.matrix`             | `compute_coverage()`, `CoverageEntry`, `CoverageReport` dataclasses                                                                       | `matrix.py`             |
+| `pytest_feature_coverage.outcomes`           | `OutcomeTracker` — tracks per-node-ID setup/call/teardown outcomes; `passing_nodeids()` yields only clean passes                          | `outcomes.py`           |
 | `pytest_feature_coverage.reporters.text`     | `render_text()` — checkmark/X format with test node IDs                                                                                   | `reporters/text.py`     |
 | `pytest_feature_coverage.reporters.json`     | `render_json()` — structured JSON matching contract                                                                                       | `reporters/json.py`     |
 | `pytest_feature_coverage.reporters.markdown` | `render_markdown()` — table format with summary                                                                                           | `reporters/markdown.py` |
 
 ## Feature-to-Code Mapping
 
-| Feature                     | Primary Code                                                  | Tests                                                                                                                                    | Design Doc                   |
-| --------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| YAML schema loading (US1)   | `schema.py`                                                   | `tests/unit/test_schema.py`, `tests/integration/test_plugin_integration.py`                                                              | `specs/.../data-model.md`    |
-| req() marker scanning (US2) | `scanner.py`, `plugin.py` (collection hook)                   | `tests/unit/test_scanner.py`, `tests/integration/test_plugin_integration.py`                                                             | `specs/.../spec.md`          |
-| Coverage report (US3)       | `matrix.py`, `reporters/text.py`, `plugin.py` (terminal hook) | `tests/unit/test_matrix.py`, `tests/unit/test_reporters.py`, `tests/unit/test_plugin.py`, `tests/integration/test_plugin_integration.py` | `specs/.../contracts/cli.md` |
-| CI threshold (US4)          | `plugin.py` (sessionfinish hook)                              | `tests/unit/test_plugin.py`, `tests/integration/test_ci_threshold.py`                                                                    | `specs/.../contracts/cli.md` |
-| JSON/Markdown formats (US5) | `reporters/json.py`, `reporters/markdown.py`                  | `tests/unit/test_reporters.py`, `tests/integration/test_plugin_integration.py`                                                           | `specs/.../contracts/cli.md` |
-| Config resolution (US6)     | `plugin.py` (addoption/configure)                             | `tests/unit/test_plugin.py`, `tests/integration/test_plugin_integration.py`                                                              | `specs/.../contracts/cli.md` |
+| Feature                     | Primary Code                                                                                  | Tests                                                                                                                                    | Design Doc                                   |
+| --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| YAML schema loading (US1)   | `schema.py`                                                                                   | `tests/unit/test_schema.py`, `tests/integration/test_plugin_integration.py`                                                              | `specs/.../data-model.md`                    |
+| req() marker scanning (US2) | `scanner.py`, `plugin.py` (collection hook)                                                   | `tests/unit/test_scanner.py`, `tests/integration/test_plugin_integration.py`                                                             | `specs/.../spec.md`                          |
+| Coverage report (US3)       | `matrix.py`, `reporters/text.py`, `plugin.py` (terminal hook)                                 | `tests/unit/test_matrix.py`, `tests/unit/test_reporters.py`, `tests/unit/test_plugin.py`, `tests/integration/test_plugin_integration.py` | `specs/.../contracts/cli.md`                 |
+| Execution-aware coverage    | `outcomes.py`, `plugin.py` (`pytest_runtest_makereport` hookwrapper, `_apply_outcome_filter`) | `tests/unit/test_outcomes.py`, `tests/unit/test_plugin.py`, `tests/integration/test_execution_coverage.py`                               | `specs/002-execution-aware-coverage/spec.md` |
+| CI threshold (US4)          | `plugin.py` (sessionfinish hook)                                                              | `tests/unit/test_plugin.py`, `tests/integration/test_ci_threshold.py`                                                                    | `specs/.../contracts/cli.md`                 |
+| JSON/Markdown formats (US5) | `reporters/json.py`, `reporters/markdown.py`                                                  | `tests/unit/test_reporters.py`, `tests/integration/test_plugin_integration.py`                                                           | `specs/.../contracts/cli.md`                 |
+| Config resolution (US6)     | `plugin.py` (addoption/configure)                                                             | `tests/unit/test_plugin.py`, `tests/integration/test_plugin_integration.py`                                                              | `specs/.../contracts/cli.md`                 |
 
 ## Boundaries
 

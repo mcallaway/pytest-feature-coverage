@@ -61,3 +61,20 @@ components:
       7: "The --feature-coverage-filter option appears in pytest --help output with a clear, user-facing description"
       8: All three output format reporters (text, JSON, markdown) respect the filter and produce output scoped to the filtered feature set
       9: "Filtering to 0 matching features produces an empty report with Overall: 0/0 requirements covered (0.0%) and does not raise an error"
+
+  EXECUTION_COVERAGE:
+    name: Execution-aware coverage (a requirement is covered only by a genuine pass)
+    requirements:
+      1: A node ID with a clean setup/call/teardown pass is tracked as achieving a clean pass
+      2: A node ID whose call phase fails is not tracked as a clean pass
+      3: A node ID whose call phase is a plain skip is not tracked as a clean pass
+      4: A node ID whose call phase is an expected xfail is not tracked as a clean pass
+      5: A node ID whose call phase is an unexpected xpass is not tracked as a clean pass (deliberate policy, see ADR-006)
+      6: A node ID whose setup phase errors is not tracked as a clean pass
+      7: A node ID whose teardown phase errors is not tracked as a clean pass, even after a passing call phase
+      8: Node IDs are tracked independently of one another
+      9: A requirement is covered if and only if at least one of its associated node IDs achieved a clean pass; only clean-pass node IDs appear as covering evidence
+      10: When multiple node IDs (including parametrized cases) reference the same requirement, one clean pass is enough to cover it and only the passing node ID(s) are listed as evidence
+      11: "--feature-coverage-min is evaluated against execution-aware coverage and never hides pytest's own failing exit status"
+      12: Text, JSON, and Markdown reports agree on total requirement count, covered count, percentage, and covering node IDs for the same run
+      13: The plugin remains inert (no outcome tracking overhead) unless --feature-coverage is active

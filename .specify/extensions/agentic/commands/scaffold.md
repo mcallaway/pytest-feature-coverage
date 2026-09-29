@@ -4,7 +4,7 @@ description: Create the TTL-aware docs/ tree with READMEs, rubrics, and layered 
 
 # Scaffold Agentic Development Structure
 
-Set up the project-level documentation tree and layered instruction files that complement Spec Kit's per-feature artifacts in `.specify/specs/`.
+Set up the project-level documentation tree and layered instruction files that complement Spec Kit's per-feature artifacts (`specs/NNN/` by default, or `.specify/specs/NNN/` for repos still on the legacy location).
 
 ## User Input
 
@@ -12,7 +12,7 @@ $ARGUMENTS
 
 ## Purpose
 
-Spec Kit manages per-feature lifecycle artifacts (spec, plan, tasks) under `.specify/specs/`. This command creates the **project-level knowledge layer** that persists across features — design documents, architectural decisions, guides, and plans that accumulate over the life of the project.
+Spec Kit manages per-feature lifecycle artifacts (spec, plan, tasks) under `specs/NNN/` (the current default; some repos still have existing features at the legacy `.specify/specs/NNN/` location). This command creates the **project-level knowledge layer** that persists across features — design documents, architectural decisions, guides, and plans that accumulate over the life of the project.
 
 Every folder has explicit metadata: purpose, TTL (time-to-live), intended authors, and intended audience. This metadata helps both humans and agents understand when to create, update, and retire documents.
 
@@ -75,7 +75,7 @@ features/ (what) --drives--> plans/ (work) --produces--> decisions/ (why)
 
 - **features/** define capabilities the system must provide
 - **design/** describes how those capabilities are implemented
-- **plans/** GPS dashboard indexing active `.specify/specs/` plans; rubric for plan quality
+- **plans/** durable project-level plan entries, paired with `specs/NNN/` implementation plans via cross-reference; dashboard indexing them; rubric for plan quality
 - **decisions/** record trade-offs encountered during implementation
 - **guides/** explain how to use the system for humans and agents
 
@@ -182,16 +182,22 @@ At least one criterion covers how the feature behaves when things go wrong.
 ```markdown
 # Plans — Project Roadmap
 
-- **Purpose**: GPS dashboard showing active, upcoming, and completed work. This is a roadmap index, not a place for individual plan files — those live in `.specify/specs/NNN/plan.md`.
+- **Purpose**: The story of the project's evolution. This folder holds durable, project-level plan
+  entries (`NNN-slug.md`) alongside a roadmap dashboard (this file) that indexes them. Each
+  project-level plan is paired -- via an explicit cross-reference, not necessarily matching numbers
+  -- with the Spec Kit implementation-level plan it corresponds to (default location `specs/NNN/plan.md`).
+  Not every implementation-level plan needs a paired project-level entry (small bugfixes may not
+  warrant one); use judgment.
 - **TTL**: short (updated each session that changes what's active).
 - **Author(s)**: Updated every session that touches the active plan.
 - **Audience(s)**: Fresh agent sessions resuming work; humans tracking progress.
 
-See `RUBRIC.md` in this folder for criteria applied to Spec Kit plans via the `after_plan` hook.
+See `RUBRIC.md` in this folder for criteria applied to both this dashboard and individual project
+plans, via the `after_plan` hook.
 
 ## Current Focus
 
-<!-- Link to the active .specify/specs/NNN/ plan here -->
+<!-- Link to the active docs/plans/NNN-slug.md entry here, cross-referenced to its specs/NNN/plan.md -->
 
 None yet.
 
@@ -209,8 +215,17 @@ None yet.
 ```markdown
 # Plan Rubric
 
-Evaluative criteria for plan documents in `.specify/specs/NNN/plan.md`.
-Applied automatically via the `after_plan` hook, or manually with `/speckit.agentic.apply-rubric`.
+Evaluative criteria for plan documents at both layers: project-level plans (`docs/plans/NNN.md`)
+and Spec Kit's implementation-level plans (`specs/NNN/plan.md`). Applied automatically via the
+`after_plan` hook (against whichever document `/speckit.plan` just created or updated), or manually
+with `/speckit.agentic.apply-rubric`.
+
+## Header
+
+### Status/Created/Updated metadata is present
+
+A `docs/plans/NNN.md` project-level plan states its Status (Active, Deferred, Completed, or
+Proposed for a backlog entry created ahead of implementation), and when it was created/last updated.
 
 ## Phases
 
@@ -242,6 +257,12 @@ A plan that requires more than a handful of sessions to complete should be broke
 
 The plan references the feature doc or decision that triggered the work.
 
+### Cross-reference to the paired plan is present, when one is warranted
+
+A `docs/plans/NNN.md` project-level plan links to its paired `specs/NNN/plan.md` implementation-level
+plan, and vice versa, whenever such a pairing exists. **Exception**: a project-level plan in
+`Proposed` status MUST NOT fail this criterion solely for lacking that cross-reference yet.
+
 ### Close-out criteria match deliverables
 
 What counts as "done" aligns with what the phases produce.
@@ -251,6 +272,8 @@ What counts as "done" aligns with what the phases produce.
 - A phase deliverable is stated as a process ("researching X") rather than an artifact
 - Goals section is missing or only restates the title
 - No feature or decision is referenced as motivation
+- A non-`Proposed` project-level plan has no cross-reference to any implementation-level plan, and
+  no stated reason why one does not (yet) apply
 ```
 
 ### Step 8: Write docs/decisions/README.md
@@ -416,7 +439,10 @@ Folders differ from one another not by topic but by how long their contents are 
 | `guides/`    | How to use the system            | long      | Both humans and agents needing workflows |
 | `notes.md`   | Scratch pad                      | short     | Current session |
 
-Individual per-feature plans live in `.specify/specs/NNN/plan.md` (managed by Spec Kit). `docs/plans/README.md` is a GPS dashboard that indexes active, upcoming, and completed plans.
+Individual per-feature implementation plans live in `specs/NNN/plan.md` (managed by Spec Kit;
+`.specify/specs/NNN/plan.md` for repos still on the legacy location). Durable, project-level plan
+entries live in `docs/plans/NNN-slug.md`, each cross-referenced to its paired implementation plan.
+`docs/plans/README.md` is a dashboard that indexes active, upcoming, and completed project-level plans.
 
 ### The documentation cycle
 
@@ -481,10 +507,13 @@ Use the full sequence for any new capability that merits a specification:
 | 5 | `/speckit.agentic.start-work` | Load project context for implementation session |
 | 6 | `/speckit.implement` | Execute the tasks |
 | 7 | `/speckit.agentic.document-decisions` | Capture trade-offs as ADRs (as needed during 5-6) |
-| 8 | `/speckit.agentic.code-review` | Review correctness, clarity, testing |
-| 9 | `/speckit.agentic.review-alignment` | Check for drift between code and design docs |
-| 10 | `/speckit.agentic.review-pr` | Pre-merge PR checklist |
-| 11 | `/speckit.agentic.close-plan` | Finalize docs, ADRs, plan status before merge |
+| 8 | `/speckit.agentic.review-alignment` | Check for drift between code and design docs |
+| 9 | `/speckit.agentic.apply-rubric` | Evaluate changed artifacts against their rubric |
+| 10 | `/speckit.agentic.code-review` | Review correctness, clarity, testing |
+| 11 | `/speckit.agentic.extract-lessons` | Surface reusable patterns from recent work (optional) |
+| 12 | `/speckit.agentic.close-plan` | Finalize docs, ADRs, plan status -- produces the final commit |
+| 13 | `/speckit.agentic.review-pr` | Pre-merge PR checklist, run against that final commit |
+| 14 | `/speckit.agentic.merge-pr` | Human-invoked: merge and sync local state -- terminal action, never auto-chained (ADR-011) |
 
 ### Small Bugfixes
 
@@ -495,7 +524,10 @@ Not every change needs a full spec. For well-understood bugs:
 | 1 | `/speckit.agentic.start-work` |
 | 2 | Fix the bug |
 | 3 | `/speckit.agentic.code-review` |
-| 4 | `/speckit.agentic.review-pr` (if creating a PR) |
+| 4 | `/speckit.agentic.apply-rubric` |
+| 5 | `/speckit.agentic.close-plan` (lightweight, if warranted) |
+| 6 | `/speckit.agentic.review-pr` (if creating a PR) -- final check before you merge |
+| 7 | `/speckit.agentic.merge-pr` (human-invoked, once ready) |
 
 ### Refactoring and Maintenance
 
@@ -522,8 +554,8 @@ For structural improvements, dependency updates, or architectural changes:
 
 | Command | Reads from | Writes to |
 | ------- | ---------- | --------- |
-| `/speckit.specify` | `docs/features/`, `docs/design/` | `.specify/specs/NNN/spec.md` |
-| `/speckit.plan` | spec, `docs/plans/README.md` | `.specify/specs/NNN/plan.md` |
+| `/speckit.specify` | `docs/features/`, `docs/design/` | `specs/NNN/spec.md` |
+| `/speckit.plan` | spec, `docs/plans/README.md` | `specs/NNN/plan.md`, paired `docs/plans/NNN.md` |
 | `/speckit.implement` | plan, `docs/design/`, AGENTS.md | Source code |
 | `start-work` | `docs/plans/README.md`, AGENTS.md | (context loading) |
 | `document-decisions` | `docs/design/` | `docs/decisions/` (ADR drafts) |
@@ -619,88 +651,17 @@ Each guide should include:
 - [001-agentic-development-workflow.md](001-agentic-development-workflow.md) -- Step-by-step workflow guide
 ```
 
-### Step 14: Write docs/guides/001-agentic-development-workflow.md
+### Step 14: Copy docs/guides/001-agentic-development-workflow.md
 
-This is the practical companion to the design doc. It walks through the full feature lifecycle step by step.
+Copy the workflow guide from the installed extension into the project:
 
-```markdown
-# Agentic Development Workflow Guide
-
-How to follow the agentic development workflow pattern. For the design rationale, see [the design doc](../design/001-agentic-development-pattern.md).
-
-## Implementing This Pattern
-
-### For a new project
-
-1. Run `/speckit.agentic.scaffold` to create the docs/ tree and AGENTS.md layering
-1. Create the codebase map early with `/speckit.agentic.codebase-map`
-1. Start using the feature lifecycle (below) for your first piece of work
-
-### For an existing project
-
-1. Run `/speckit.agentic.scaffold` — it will skip files that already exist
-1. Restructure any existing conventions into AGENTS.md files (preserve substance, change delivery)
-1. Run `/speckit.agentic.codebase-map` to document what already exists
-1. Adopt the lifecycle incrementally, starting with code-review and document-decisions
-
-## Feature Lifecycle
-
-The key rhythm: plan in one session, implement in another, review in a third. Fresh sessions prevent context bleed.
-
-**Step 1: Define the feature** *(fresh session)* — `/speckit.specify`
-
-- Start a session in planning mode to refine the idea
-- Spec Kit creates a spec in `.specify/specs/NNN/spec.md`
-- The spec is the durable artifact, not the conversation
-
-**Step 2: Create a plan** *(fresh session)* — `/speckit.plan`
-
-- Start a new session. Plan references the spec and existing design docs
-- The `after_plan` hook offers to evaluate the plan against `docs/plans/RUBRIC.md`
-- Update `docs/plans/README.md` to reflect the new current focus
-
-**Step 3: Implement** *(fresh session per work chunk)* — `/speckit.implement`
-
-- Run `/speckit.agentic.start-work` to load context
-- Write code. Commit frequently
-- When making trade-offs, run `/speckit.agentic.document-decisions` to capture them as ADRs
-- The `after_implement` hook offers a code review
-
-**Step 4: Review** *(fresh session)* — `/speckit.agentic.code-review`
-
-- Review changed files for correctness, clarity, and testing
-- Run `/speckit.agentic.review-alignment` to check for drift between code and design docs
-
-**Step 5: Create and review PR** *(fresh session)* — `/speckit.agentic.review-pr`
-
-- Push the branch and create a PR
-- Run the pre-merge checklist: CI status, diff scope, documentation
-
-**Step 6: Close out and merge** — `/speckit.agentic.close-plan`
-
-- Finalize docs/ updates before merge
-- Move plan to completed in `docs/plans/README.md`
-- Finalize any ADR drafts
-
-**Periodic: Reflect and maintain**
-
-- Run `/speckit.agentic.extract-lessons` to surface patterns from recent work
-- Run `/speckit.agentic.codebase-map` to keep `docs/design/codebase-map.md` current
-- Run `/speckit.agentic.onboard` for new team members or re-familiarization
-
-## Command Cadence
-
-- **Every feature cycle**: specify → plan → start-work → implement → code-review → review-alignment → review-pr → close-plan
-- **Periodic**: extract-lessons, codebase-map, onboard
-- **As needed**: document-decisions (during implementation), apply-rubric (any time)
-
-## What to Avoid
-
-- **Don't create parallel memory systems.** Commands read from and write to docs/; don't create separate output directories
-- **Don't over-engineer.** Three focused commands used regularly beat ten gathering dust
-- **Don't let the codebase map go stale.** A stale map is worse than no map
-- **Don't restructure and change substance simultaneously.** When decomposing existing conventions into AGENTS.md files, do it as a pure restructuring first
+```bash
+cp .specify/extensions/agentic/seed/001-agentic-development-workflow.md docs/guides/001-agentic-development-workflow.md
 ```
+
+If the file already exists, skip this step.
+
+This file is the day-to-day working reference for the project: how to invoke commands (VS Code vs CLI), the feature lifecycle table, workflow details for bugs and refactors, and session discipline. To update it in the future (e.g., after upgrading the extension), re-run the copy command above.
 
 ### Step 15: Create layered AGENTS.md files
 

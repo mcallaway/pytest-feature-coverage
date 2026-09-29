@@ -1,6 +1,6 @@
 # ADR-003: What "Tested" Means in This Project
 
-- **Status**: Accepted
+- **Status**: Accepted (Layer 2's definition of "covering test" is refined by [ADR-006](006-execution-aware-covering-test.md))
 - **Date**: 2026-07-18
 
 ## Context
@@ -27,7 +27,7 @@ Adopt a layered definition of "tested":
 
 **Layer 1 — Execution coverage** (`mise run test:coverage`) Source lines and branches execute. Necessary but not sufficient. The number itself (`100%`) is not the goal — it is a floor that prevents obvious gaps.
 
-**Layer 2 — Feature coverage** (`mise run test:features`) Every declared requirement has at least one covering test. *Read the output*, not just the pass/fail. A requirement with 0 covering tests is a warning even when overall coverage is 100%.
+**Layer 2 — Feature coverage** (`mise run test:features`) Every declared requirement has at least one covering test. *Read the output*, not just the pass/fail. A requirement with 0 covering tests is a warning even when overall coverage is 100%. See [ADR-006](006-execution-aware-covering-test.md) for the precise, execution-aware definition of "covering test."
 
 **Layer 3 — Structural review** (`speckit.agentic.code-review`) Test infrastructure, class structure, marker correctness, and assertion resilience cannot be verified by automated metrics. Code review is not redundant with coverage — it catches orthogonal failure classes. Make it routine, not exceptional.
 

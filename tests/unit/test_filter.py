@@ -6,12 +6,20 @@ import types
 
 import pytest
 
+from pytest_feature_coverage.outcomes import OutcomeTracker
 from pytest_feature_coverage.plugin import _compute_and_store_report
 from pytest_feature_coverage.schema import (
     ComponentModel,
     FeatureFileModel,
     FeatureModel,
 )
+
+
+def _passing_tracker(*nodeids: str) -> OutcomeTracker:
+    tracker = OutcomeTracker()
+    for nodeid in nodeids:
+        tracker.record(nodeid, 'call', 'passed', None)
+    return tracker
 
 
 _PLUGIN_STATE_ATTR = '_feature_coverage_state'
@@ -33,8 +41,18 @@ def _make_config(
     config.getoption = lambda opt, **_kw: (
         filters if opt == '--feature-coverage-filter' else None
     )
+    # 'outcomes' is always present in real plugin state (set unconditionally
+    # in pytest_configure); mirror that invariant here rather than relying on
+    # a fallback default in production code.
     setattr(
-        config, _PLUGIN_STATE_ATTR, {'features': features, 'req_map': {}, 'orphans': []}
+        config,
+        _PLUGIN_STATE_ATTR,
+        {
+            'features': features,
+            'req_map': {},
+            'orphans': [],
+            'outcomes': OutcomeTracker(),
+        },
     )
     return config
 
@@ -142,6 +160,7 @@ class TestFilteredOverallPercentage:
                 'features': [alpha, beta],
                 'req_map': req_map,
                 'orphans': [],
+                'outcomes': _passing_tracker('test.py::test_a'),
             },
         )
         _compute_and_store_report(config)
@@ -170,6 +189,7 @@ class TestOrphansUnaffectedByFilter:
                 'features': [alpha, beta],
                 'req_map': {},
                 'orphans': ['nonexistent.COMP.1'],
+                'outcomes': OutcomeTracker(),
             },
         )
         _compute_and_store_report(config)
@@ -208,6 +228,7 @@ class TestThresholdAgainstFilteredPercentage:
                 'features': [alpha, beta],
                 'req_map': req_map,
                 'orphans': [],
+                'outcomes': _passing_tracker('t::a', 't::b', 't::c', 't::d'),
             },
         )
         _compute_and_store_report(config)

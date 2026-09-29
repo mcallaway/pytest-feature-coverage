@@ -76,6 +76,6 @@ If no issues found, say so clearly — don't invent problems.
 
 ## Notes
 
-- Be honest: if the code is good, say so. Don't pad the review.
+- Say clearly when the code is good — an honest "this looks correct" is more useful than a padded review.
 - Focus on substance over style — formatting is the linter's job.
 - Design-doc staleness is NOT this command's responsibility. Use `/speckit.agentic.review-alignment` for that.

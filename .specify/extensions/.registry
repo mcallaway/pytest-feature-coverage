@@ -8,7 +8,14 @@
       "enabled": true,
       "priority": 10,
       "registered_commands": {
-        "copilot": [
+        "claude": [
+          "speckit.git.feature",
+          "speckit.git.validate",
+          "speckit.git.remote",
+          "speckit.git.initialize",
+          "speckit.git.commit"
+        ],
+        "cursor-agent": [
           "speckit.git.feature",
           "speckit.git.validate",
           "speckit.git.remote",
@@ -16,17 +23,23 @@
           "speckit.git.commit"
         ]
       },
-      "registered_skills": [],
+      "registered_skills": [
+        "speckit-git-feature",
+        "speckit-git-validate",
+        "speckit-git-remote",
+        "speckit-git-initialize",
+        "speckit-git-commit"
+      ],
       "installed_at": "2026-05-19T19:05:02.520586+00:00"
     },
     "agentic": {
-      "version": "0.1.0",
+      "version": "0.4.2",
       "source": "local",
-      "manifest_hash": "sha256:de1c455f3fdb6e9d6cf72281cf4ac9d6942e33a049fc388bfc70d376a69d8602",
+      "manifest_hash": "sha256:57c50ccf1e1f2199d1d3931665d22ccf06607be098dd217cfcb70374c7b348a4",
       "enabled": true,
       "priority": 10,
       "registered_commands": {
-        "copilot": [
+        "cursor-agent": [
           "speckit.agentic.scaffold",
           "speckit.agentic.start-work",
           "speckit.agentic.code-review",
@@ -37,11 +50,14 @@
           "speckit.agentic.document-decisions",
           "speckit.agentic.extract-lessons",
           "speckit.agentic.codebase-map",
-          "speckit.agentic.onboard"
+          "speckit.agentic.onboard",
+          "speckit.agentic.guided-pr-review",
+          "speckit.agentic.full-workflow",
+          "speckit.agentic.merge-pr"
         ]
       },
       "registered_skills": [],
-      "installed_at": "2026-05-19T19:05:23.026029+00:00"
+      "installed_at": "2026-09-29T16:32:22.864469+00:00"
     }
   }
 }

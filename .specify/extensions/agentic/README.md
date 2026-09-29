@@ -4,16 +4,16 @@ A Spec Kit extension that adds TTL-aware project memory, rubric-driven quality g
 
 ## What This Adds to Spec Kit
 
-Spec Kit manages **per-feature** lifecycle artifacts (spec → plan → tasks → implement) under `.specify/specs/`. This extension adds the **project-level knowledge layer** that persists across features:
+Spec Kit manages **per-feature** lifecycle artifacts (spec → plan → tasks → implement) under `specs/NNN/` (the current default; some repos still have existing features at the legacy `.specify/specs/NNN/` location). This extension adds the **project-level knowledge layer** that persists across features:
 
-| Artifact          | Purpose                               | TTL       |
-| ----------------- | ------------------------------------- | --------- |
-| `docs/features/`  | User stories with acceptance criteria | medium    |
-| `docs/plans/`     | Roadmap dashboard + plan rubric       | short     |
-| `docs/decisions/` | Architecture Decision Records         | immutable |
-| `docs/design/`    | System as it currently is             | long      |
-| `docs/guides/`    | How to use the system                 | long      |
-| `docs/notes.md`   | Scratch pad                           | short     |
+| Artifact          | Purpose                                                                                                          | TTL       |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- | --------- |
+| `docs/features/`  | User stories with acceptance criteria                                                                            | medium    |
+| `docs/plans/`     | Durable project-level plan entries, cross-referenced with Spec Kit's per-feature plans, plus a roadmap dashboard | short     |
+| `docs/decisions/` | Architecture Decision Records                                                                                    | immutable |
+| `docs/design/`    | System as it currently is                                                                                        | long      |
+| `docs/guides/`    | How to use the system                                                                                            | long      |
+| `docs/notes.md`   | Scratch pad                                                                                                      | short     |
 
 Each folder includes a `README.md` (format, TTL, authors, audience) and a `RUBRIC.md` (evaluative criteria for quality).
 
@@ -27,9 +27,10 @@ Each folder includes a `README.md` (format, TTL, authors, audience) and a `RUBRI
 
 ### Session Lifecycle
 
-| Command                       | Description                       |
-| ----------------------------- | --------------------------------- |
-| `/speckit.agentic.start-work` | Load context for a coding session |
+| Command                          | Description                                           |
+| -------------------------------- | ----------------------------------------------------- |
+| `/speckit.agentic.start-work`    | Load context for a coding session                     |
+| `/speckit.agentic.full-workflow` | Take a bug or feature through to an open pull request |
 
 ### Review and Quality
 
@@ -39,6 +40,7 @@ Each folder includes a `README.md` (format, TTL, authors, audience) and a `RUBRI
 | `/speckit.agentic.review-pr`        | Comprehensive pre-merge PR review                     |
 | `/speckit.agentic.review-alignment` | Detect drift between code and design docs             |
 | `/speckit.agentic.apply-rubric`     | Apply a rubric for deterministic pass/fail evaluation |
+| `/speckit.agentic.guided-pr-review` | Step-by-step PR walkthrough for a generalist reviewer |
 
 ### Knowledge Capture
 
@@ -48,6 +50,12 @@ Each folder includes a `README.md` (format, TTL, authors, audience) and a `RUBRI
 | `/speckit.agentic.document-decisions` | Capture trade-offs as ADR drafts                   |
 | `/speckit.agentic.extract-lessons`    | Promote patterns from commits to durable docs      |
 | `/speckit.agentic.codebase-map`       | Create/refresh feature-to-code mapping             |
+
+### Merge
+
+| Command                     | Description                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `/speckit.agentic.merge-pr` | Merge the PR and sync local state — human-invoked, never auto-chained (ADR-011) |
 
 ### Onboarding
 
@@ -87,9 +95,11 @@ specify extension add --dev /path/to/extensions/agentic-workflow
 # 4. After implementing, review
 /speckit.agentic.code-review
 
-# 5. Before merging
-/speckit.agentic.review-pr
+# 5. Finalize, then merge
 /speckit.agentic.close-plan
+/speckit.agentic.review-pr
+# 6. Once "Ready to merge", a human invokes the merge -- no further commits on this branch afterward
+/speckit.agentic.merge-pr
 ```
 
 ## How It Complements Spec Kit
@@ -104,9 +114,9 @@ Spec Kit Core                    This Extension
 /speckit.tasks                   [no overlap]
 /speckit.implement        →      /speckit.agentic.code-review (after)
                                  /speckit.agentic.review-alignment
-                                 /speckit.agentic.close-plan
                                  /speckit.agentic.document-decisions
                                  /speckit.agentic.extract-lessons
+                                 /speckit.agentic.close-plan
                                  /speckit.agentic.codebase-map
                                  /speckit.agentic.onboard
 ```

@@ -30,13 +30,12 @@ Acknowledge the guiding principles silently — do not recite them back.
 
 ### Step 2: Identify the active plan
 
-Read `docs/plans/README.md`. Identify the **Current Focus** section. If a plan is listed there, read the full plan document. Report:
+Read `docs/plans/README.md`. Identify the **Current Focus** section. If a project-level plan is listed there, read the full plan document and its cross-referenced Spec Kit implementation plan (the link inside the project plan points to `specs/NNN/plan.md`, or `.specify/specs/NNN/plan.md` for a feature still at the legacy location). Report both layers:
 
-- Plan title and status
-- Current phase
-- What the next deliverable is
+- **Project plan**: title, status, current phase, what the next deliverable is
+- **Implementation plan** (if a cross-reference exists): feature name, branch, current task/phase per its `tasks.md`
 
-If no active plan exists, check if a Spec Kit feature is in-progress by looking at `.specify/specs/` for any active spec/plan/tasks. Report what you find.
+If no active project-level plan exists, check for an in-progress Spec Kit feature directly: resolve its location via `.specify/feature.json`'s `feature_directory` key (or the `SPECIFY_FEATURE_DIRECTORY` env var) rather than assuming a fixed path -- the current default for new features is top-level `specs/NNN/`; some existing features in a given repo may still live at the legacy `.specify/specs/NNN/` path. Report what you find, and note whether it has a paired `docs/plans/` entry.
 
 ### Step 3: Load design context
 
@@ -44,7 +43,7 @@ Read the following (skip any that don't exist):
 
 1. `docs/design/codebase-map.md` — to understand feature-to-code mapping
 1. Any design docs referenced by the active plan
-1. The active spec (`.specify/specs/*/spec.md`) if working on a Spec Kit feature
+1. The active spec (`spec.md` under the feature's specs directory, resolved as in Step 2) if working on a Spec Kit feature
 
 ### Step 4: Pre-flight checks
 
@@ -52,8 +51,8 @@ Report the following:
 
 - **Branch**: Current git branch name
 - **Uncommitted changes**: Any modified/untracked files (warn if present)
-- **Active plan**: Title and phase, or "none"
-- **Active spec**: Feature name, or "none"
+- **Active project plan**: Title and phase, or "none"
+- **Active implementation plan**: Feature name, or "none"
 
 ### Step 5: Summarize and await direction
 

@@ -4,7 +4,7 @@ description: Pre-merge finalization — update plan status, finalize ADRs, flag 
 
 # Close Plan
 
-Pre-merge finalization after `/speckit.agentic.review-pr` passes. Updates plan status, verifies documentation accuracy, finalizes ADRs, and flags loose ends.
+Pre-merge finalization, run before `/speckit.agentic.review-pr`. Updates plan status, verifies documentation accuracy, finalizes ADRs, and flags loose ends.
 
 ## User Input
 
@@ -12,15 +12,15 @@ $ARGUMENTS
 
 ## Purpose
 
-Before merging, ensure the project's documentation accurately reflects the work that was done. Plans are closed, ADRs are finalized, design docs are current, and no pending updates remain.
+Before merging, ensure the project's documentation accurately reflects the work that was done. Plans are closed, ADRs are finalized, design docs are current, and no pending updates remain. This step produces the final documentation commit for the PR -- run `/speckit.agentic.review-pr` immediately afterward so its CI and diff review cover that final state (see ADR-010).
 
 ## Steps
 
 ### Step 1: Identify the active plan
 
-Read `docs/plans/README.md` and identify the plan in **Current Focus**. If `$ARGUMENTS` specifies a plan, use that instead.
+Read `docs/plans/README.md` and identify the project-level plan in **Current Focus**. If `$ARGUMENTS` specifies a plan, use that instead.
 
-If no active plan is found, check `.specify/specs/` for the current feature's artifacts and work with those.
+If no active project-level plan is found, resolve the current feature's Spec Kit artifacts (via `.specify/feature.json`'s `feature_directory` key or `SPECIFY_FEATURE_DIRECTORY`, not a hardcoded path -- the current default location is top-level `specs/NNN/`; some existing features may still live at the legacy `.specify/specs/NNN/` path) and read those. Do not treat the absence of a `docs/plans/` entry as settled by this alone: judge whether this work's project-story significance warrants creating one now (see Step 5) before concluding there is nothing to close at the project-plan layer.
 
 ### Step 2: Verify plan completion
 
@@ -45,10 +45,9 @@ Read design docs in `docs/design/`. Look for any "Pending Updates" sections or T
 
 ### Step 5: Update plan status
 
-1. In the plan document, update the status header to COMPLETE
-1. In `docs/plans/README.md`:
-   - Move the plan from **Current Focus** to **Completed**
-   - Update **Next Steps** if appropriate
+1. If a project-level `docs/plans/NNN.md` entry exists for this work (from Step 1, or created during `/speckit.plan`): update the status header to COMPLETE, and in `docs/plans/README.md`, move it from **Current Focus** to **Completed**, updating **Next Steps** if appropriate.
+1. If no `docs/plans/NNN.md` entry exists yet and Step 1's judgment concluded this work does warrant one (a meaningful change in project direction, or a recurring class of issue worth tracking -- not every fix qualifies), create it now: `Status: COMPLETE` from the start, cross-referenced to this work's `specs/NNN/` (or `.specify/specs/NNN/`) artifacts, and add it directly to `docs/plans/README.md`'s **Completed** section. State the reasoning for creating it at close time rather than during planning.
+1. If Step 1's judgment concluded no project-level entry is warranted, state that conclusion explicitly rather than leaving it ambiguous whether the omission was a decision or an oversight.
 
 ### Step 6: Final commit
 
@@ -70,6 +69,6 @@ Report any items that need follow-up:
 
 ## Notes
 
-- Run this AFTER `/speckit.agentic.review-pr` confirms the PR is ready
-- This is the last step before merge
+- Run this BEFORE `/speckit.agentic.review-pr`. This step's commit needs to be part of what review-pr and CI evaluate; running it after review-pr's "Ready to merge" verdict makes that verdict stale the moment this step pushes a new commit (see ADR-010).
+- After `/speckit.agentic.review-pr` passes following this step, the only remaining action is a human merging the PR. Do not plan or run further commits against this branch after that -- new work is a new branch.
 - If working with Spec Kit features, also verify the spec's acceptance criteria are met

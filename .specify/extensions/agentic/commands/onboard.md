@@ -39,7 +39,7 @@ Pause: "Any questions about the architecture?"
 
 Walk through the main code areas:
 
-1. **Source structure**: What lives where in src/
+1. **Source structure**: What lives where — point to the primary source directories (`src/`, `lib/`, `packages/`, or equivalent for this project's language)
 1. **Key modules**: The 3-5 most important modules and what they do
 1. **Testing**: How tests are organized, how to run them
 1. **Configuration**: Key config files and what they control

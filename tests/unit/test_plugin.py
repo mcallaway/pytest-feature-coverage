@@ -108,11 +108,39 @@ class TestGetKnownRequirementIds:
         }
 
 
+class TestApplyOutcomeFilter:
+    """Tests for _apply_outcome_filter."""
+
+    @pytest.mark.req('feature-coverage-plugin.EXECUTION_COVERAGE.9')
+    def test_narrows_to_passing_nodeids_preserving_order(self) -> None:
+        from pytest_feature_coverage.plugin import _apply_outcome_filter
+
+        req_map = {'app.CORE.1': ['t.py::a', 't.py::b', 't.py::c']}
+        passing = {'t.py::a', 't.py::c'}
+        assert _apply_outcome_filter(req_map, passing) == {
+            'app.CORE.1': ['t.py::a', 't.py::c']
+        }
+
+    @pytest.mark.req('feature-coverage-plugin.EXECUTION_COVERAGE.9')
+    def test_requirement_with_no_passing_nodeids_has_empty_list(self) -> None:
+        from pytest_feature_coverage.plugin import _apply_outcome_filter
+
+        req_map = {'app.CORE.1': ['t.py::a', 't.py::b']}
+        assert _apply_outcome_filter(req_map, set()) == {'app.CORE.1': []}
+
+    @pytest.mark.req('feature-coverage-plugin.EXECUTION_COVERAGE.9')
+    def test_empty_req_map_returns_empty_dict(self) -> None:
+        from pytest_feature_coverage.plugin import _apply_outcome_filter
+
+        assert _apply_outcome_filter({}, {'t.py::a'}) == {}
+
+
 class TestComputeAndStoreReport:
     """Tests for _compute_and_store_report."""
 
     @pytest.mark.req('feature-coverage-plugin.COVERAGE_REPORT.1')
     def test_computes_and_stores_report(self) -> None:
+        from pytest_feature_coverage.outcomes import OutcomeTracker
         from pytest_feature_coverage.plugin import _compute_and_store_report
         from pytest_feature_coverage.schema import (
             ComponentModel,
@@ -124,10 +152,13 @@ class TestComputeAndStoreReport:
             feature=FeatureModel(id='001', name='app'),
             components={'CORE': ComponentModel(name='Core', requirements={1: 'Desc'})},
         )
+        outcomes = OutcomeTracker()
+        outcomes.record('t.py::t', 'call', 'passed', None)
         state: dict = {
             'features': [feature],
             'req_map': {'app.CORE.1': ['t.py::t']},
             'orphans': ['some.orphan.1'],
+            'outcomes': outcomes,
         }
         config = types.SimpleNamespace()
         config.getoption = lambda *_a, **_kw: None
