@@ -63,6 +63,12 @@ Each folder includes a `README.md` (format, TTL, authors, audience) and a `RUBRI
 | -------------------------- | ------------------------------------------------ |
 | `/speckit.agentic.onboard` | Interactive project onboarding for new engineers |
 
+### Pack Maintenance
+
+| Command                         | Description                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------ |
+| `/speckit.agentic.upgrade-pack` | Upgrade this extension/preset so every installed integration reaches the new version |
+
 ## Installation
 
 **Prerequisites**: `specify-cli` installed, an AI agent with slash command support.

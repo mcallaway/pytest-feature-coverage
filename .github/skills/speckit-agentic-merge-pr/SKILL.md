@@ -40,7 +40,15 @@ gh pr view --json mergeable,mergeStateStatus,reviewDecision
 
 ### Step 2: Merge
 
-Merge using the repository's established convention. Unless project documentation says otherwise, check recent history for the convention in use (`git log --oneline --merges -10`, or `gh pr list --state merged --limit 5`) -- a single commit per PR titled after the PR indicates squash merges:
+Merge using the repository's established convention. Unless project documentation says otherwise, check recent history for the convention in use (`git log --oneline --merges -10`, or `gh pr list --state merged --limit 5`) -- a single commit per PR titled after the PR indicates squash merges.
+
+**If this repository uses release-please** (a `release-please-config.json`/`.release-please-manifest.json` at the repo root, or a `release-please` workflow under `.github/workflows/`): release-please parses the squash-merge commit's *subject line* as a Conventional Commit (`feat: ...`, `fix: ...`, `docs: ...`, etc.) to decide whether a release is warranted and what to put in the changelog. `gh pr merge --squash` defaults to using the PR's title verbatim as that subject line. If the PR title is not already Conventional-Commits-formatted, the squash commit will silently fail to parse -- release-please logs a parse error internally and treats the commit as contributing zero releasable changes, so no release PR appears and nothing in the UI flags it as broken. Check the PR title before merging; if it lacks a valid type prefix, supply a corrected one explicitly:
+
+```bash
+gh pr merge --squash --delete-branch --subject "feat: add the new thing (#123)"
+```
+
+Otherwise, the plain form is fine:
 
 ```bash
 gh pr merge --squash --delete-branch
@@ -72,6 +80,7 @@ State:
 - The PR that was merged and its merge commit
 - That local state now matches the merged default branch, and which local branches were pruned
 - If the repository uses release-please: a release PR is expected to appear or update shortly, driven by the conventional-commit types in the merged history. Merging that PR later is a separate, later invocation of this same command.
+- **If a release PR was expected but does not appear**, this is a signal the merge commit's subject failed to parse as a Conventional Commit (see Step 2). If the merge just happened and nothing else has been pushed to the default branch since, this is recoverable: amend the merge commit's subject line (keep the body intact) to a valid `type: ...` prefix, then `git push --force-with-lease`. Only do this if the default branch is unprotected and no other commit has landed on top of it in the meantime -- check both before amending. Confirm the fix worked by re-checking for the release-please run/PR after pushing.
 
 ## Notes
 

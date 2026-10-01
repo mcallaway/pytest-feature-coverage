@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: "agentic"
   name: "Agentic Development Workflow"
-  version: "0.4.2" # x-release-please-version
+  version: "0.4.3" # x-release-please-version
   description: "TTL-aware project memory, rubric-driven quality, and lifecycle commands for durable shared understanding"
   author: "bayer-int"
   category: "process"
@@ -83,6 +83,11 @@ provides:
     - name: "speckit.agentic.merge-pr"
       file: "commands/merge-pr.md"
       description: "Merge the pull request and sync local state — human-invoked terminal action after review-pr passes"
+
+    # --- Pack maintenance ---
+    - name: "speckit.agentic.upgrade-pack"
+      file: "commands/upgrade-pack.md"
+      description: "Automate upgrading the agentic extension and preset so every installed integration reaches the new version"
 
 hooks:
   after_plan:

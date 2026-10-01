@@ -33,12 +33,29 @@
       "installed_at": "2026-05-19T19:05:02.520586+00:00"
     },
     "agentic": {
-      "version": "0.4.2",
+      "version": "0.4.3",
       "source": "local",
-      "manifest_hash": "sha256:57c50ccf1e1f2199d1d3931665d22ccf06607be098dd217cfcb70374c7b348a4",
+      "manifest_hash": "sha256:f4584375a24811557502d079df446f2373b6c17941c3cbe4826843362d49a7ea",
       "enabled": true,
       "priority": 10,
       "registered_commands": {
+        "claude": [
+          "speckit.agentic.scaffold",
+          "speckit.agentic.start-work",
+          "speckit.agentic.code-review",
+          "speckit.agentic.review-pr",
+          "speckit.agentic.review-alignment",
+          "speckit.agentic.apply-rubric",
+          "speckit.agentic.close-plan",
+          "speckit.agentic.document-decisions",
+          "speckit.agentic.extract-lessons",
+          "speckit.agentic.codebase-map",
+          "speckit.agentic.onboard",
+          "speckit.agentic.guided-pr-review",
+          "speckit.agentic.full-workflow",
+          "speckit.agentic.merge-pr",
+          "speckit.agentic.upgrade-pack"
+        ],
         "cursor-agent": [
           "speckit.agentic.scaffold",
           "speckit.agentic.start-work",
@@ -53,11 +70,28 @@
           "speckit.agentic.onboard",
           "speckit.agentic.guided-pr-review",
           "speckit.agentic.full-workflow",
-          "speckit.agentic.merge-pr"
+          "speckit.agentic.merge-pr",
+          "speckit.agentic.upgrade-pack"
         ]
       },
-      "registered_skills": [],
-      "installed_at": "2026-09-29T16:32:22.864469+00:00"
+      "registered_skills": [
+        "speckit-agentic-upgrade-pack",
+        "speckit-agentic-scaffold",
+        "speckit-agentic-start-work",
+        "speckit-agentic-code-review",
+        "speckit-agentic-review-pr",
+        "speckit-agentic-review-alignment",
+        "speckit-agentic-apply-rubric",
+        "speckit-agentic-close-plan",
+        "speckit-agentic-document-decisions",
+        "speckit-agentic-extract-lessons",
+        "speckit-agentic-codebase-map",
+        "speckit-agentic-onboard",
+        "speckit-agentic-guided-pr-review",
+        "speckit-agentic-full-workflow",
+        "speckit-agentic-merge-pr"
+      ],
+      "installed_at": "2026-10-01T18:23:12.342039+00:00"
     }
   }
 }
